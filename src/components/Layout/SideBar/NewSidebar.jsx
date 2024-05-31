@@ -1,0 +1,87 @@
+import React from 'react';
+import { useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import Drawer from '@mui/material/Drawer';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
+import { Box, Typography } from '@mui/material';
+import { Logo } from '../../../assets';
+import { Item } from '../LayoutItem/Item';
+import { useRedirect } from '../../../stores/Context/RedirectContext';
+import { items } from '../../../stores/ItemPath/ItemPath';
+import { usePermission } from '../../../stores/Context/PermissionContext';
+import { getLocalItem } from '../../../stores/LocalStorage';
+import './SideBar.css';
+const drawerWidth = 300;
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: '5px',
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+}));
+
+export default function NewSidebar({ open, handleDrawerClose }) {
+    const handleRedirect = useRedirect().handleRedirect;
+    // const permissions = usePermission().permissions;
+    let sideBarItems = [];
+    // if(permissions){
+    //     if (getLocalItem('role') === "1") {
+    //         sideBarItems.push(items.find(item => item.path === '/'));
+    //         sideBarItems = sideBarItems.concat(items.filter(item =>
+    //             item.type === 'sidebar' &&
+    //             item.permission !== '' &&
+    //             permissions[item.permission - 1].status === '1'
+    //         ));
+    //     } else {
+    //         sideBarItems = items.filter(item => item.type === 'sidebar');
+    //     }
+    // }
+    const theme = useTheme();
+
+    return (
+        <Drawer
+            sx={{
+                width: drawerWidth,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                    width: drawerWidth,
+                    boxSizing: 'border-box',
+                    padding: '10px',
+                    backgroundImage: 'url(https://i.pinimg.com/236x/a4/b8/d1/a4b8d1c756ca9e06aa4f5e50ca84ef25.jpg)',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover',
+                    overflowY: 'auto',
+                },
+                
+            }}
+            variant="persistent"
+            anchor="left"
+            open={open}
+        >
+            <DrawerHeader>
+                <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+                    <Typography variant="h6" component="div">
+                        <img src={Logo} alt="Logo" style={{right: '10px' ,height: '70px', border: '1px solid #707070', borderRadius:'50%'}} />
+                    </Typography>
+                </Box>
+                <IconButton onClick={handleDrawerClose}>
+                    {theme.direction === 'ltr' ? <FaChevronLeft style={{color: "#fff"}}/> : <FaChevronRight style={{color: "#fff"}}/>}
+                </IconButton>
+            </DrawerHeader>
+            <Divider sx={{borderColor: '#fff'}}/>
+            <List>
+                {sideBarItems.map((item) => (
+                    <ListItem key={item.path} disablePadding>
+                        <Item key={item.path} item={item} action={() => handleRedirect(item.path)} />
+                    </ListItem>
+                ))}
+            </List>
+        </Drawer>
+    );
+}

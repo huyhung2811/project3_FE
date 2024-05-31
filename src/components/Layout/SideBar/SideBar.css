@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    float: left;
+    background-image: url(https://i.pinimg.com/236x/a4/b8/d1/a4b8d1c756ca9e06aa4f5e50ca84ef25.jpg);
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+}
+
+.sidebar.hide {
+    display: none;
+}
+
+.sidebar-icon {
+    color: white;
+    font-size: 28px;
+}
+
+.logo {
+    border-bottom: 1px solid #707070;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 90%;
+    padding: 10px;
+}
+
+.logo img{
+    width: 60px;
+    margin-right: 10px;
+}
+
+.logo p {
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+}
+
+.logo .sidebar-icon {
+    margin-left: 30px;
+}
+
+.personal-action {
+    width: 90%;
+    margin-top: 10px;
+}
+
+.wrapper-sidebar-item {
+    width: 100%;
+    margin: 10px 0px;
+    padding: 15px 20px;
+    text-align: left;
+    display: flex;
+    flex-direction: row ;
+    color: white;
+    border-radius: 5px;
+    align-items: center;
+}
+
+.wrapper-sidebar-item.active {
+    background-color: #707070;
+}
+
+.wrapper-sidebar-item:hover {
+    background-color: #707070;
+    cursor: pointer;
+}
+
+.wrapper-sidebar-item p {
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.wrapper-header-item {
+    width: 100%;
+    margin: 5px 0px;
+    padding: 15px 20px;
+    text-align: left;
+    display: flex;
+    flex-direction: row ;
+    color: black;
+    border-radius: 5px;
+    align-items: center;
+}
+
+.wrapper-header-item.active {
+    background-color: #2c98f0;
+    color: white;
+}
+
+.wrapper-header-item.active .sidebar-icon{
+    color: white;
+    cursor: pointer;
+}
+
+.wrapper-header-item:hover {
+    background-color: #2c98f0;
+    color: black;
+    cursor: pointer;
+}
+
+.wrapper-header-item:hover .sidebar-icon{
+    color: black;
+    cursor: pointer;
+}
+
+.wrapper-header-item p {
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+
+

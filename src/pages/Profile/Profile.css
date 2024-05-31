@@ -1,0 +1,33 @@
+.profile.background-img {
+    display: flex;
+    background-image: url(https://bcp.cdnchinhphu.vn/334894974524682240/2022/12/5/dhbkhn-6920-1658994052-1-16702134834751920701721.jpg);
+    height: 300px;
+    width: 96%;
+    border-radius: 10px;
+    position: relative;
+    background-position-y: -280px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card.profile {
+    margin-top: -100px;
+    width: 92%;
+    height: auto;
+    text-align: left;
+    margin-bottom: 20px;
+    z-index: 1;
+}
+
+label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.input {
+    width: 100%;
+    font-size: 20px;
+}
