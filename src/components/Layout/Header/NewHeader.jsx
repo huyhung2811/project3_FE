@@ -67,7 +67,7 @@ export default function Header({ pageName }) {
     }, [anchorRef]);
 
     return (
-        value.profile && <AppBar position="fixed" showSidebar={showSidebar}>
+        <AppBar position="fixed" showSidebar={showSidebar}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'flex-start', width: '-webkit-fill-available' }}>
                 <IconButton
                     color="inherit"
@@ -85,7 +85,7 @@ export default function Header({ pageName }) {
             <>
                 <div className="header-right">
                     <HeaderPopper anchorRef={anchorRef} isOpen={isOpen} anchorEl={anchorEl} setIsOpen={setIsOpen} />
-                    <img ref={anchorRef} src={value.profile.avatar ? value.profile.avatar : DefaultAvatar} alt="logo" style={{ marginRight: '10px', width: "60px", height: "60px", borderRadius: '50%', marginTop: '10px' }} onClick={handleOpen} />
+                    {value.profile && <img ref={anchorRef} src={value.profile.avatar ? value.profile.avatar : DefaultAvatar} alt="logo" style={{ marginRight: '10px', width: "60px", height: "60px", borderRadius: '50%', marginTop: '10px' }} onClick={handleOpen} />}
                 </div>
             </>
         </AppBar>
