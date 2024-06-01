@@ -13,7 +13,6 @@ import { Logo } from '../../../assets';
 import { Item } from '../LayoutItem/Item';
 import { useRedirect } from '../../../stores/Context/RedirectContext';
 import { items } from '../../../stores/ItemPath/ItemPath';
-import { usePermission } from '../../../stores/Context/PermissionContext';
 import { getLocalItem } from '../../../stores/LocalStorage';
 import './SideBar.css';
 const drawerWidth = 300;
@@ -31,16 +30,14 @@ export default function NewSidebar({ open, handleDrawerClose }) {
     // const permissions = usePermission().permissions;
     let sideBarItems = [];
     // if(permissions){
-    //     if (getLocalItem('role') === "1") {
-    //         sideBarItems.push(items.find(item => item.path === '/'));
-    //         sideBarItems = sideBarItems.concat(items.filter(item =>
-    //             item.type === 'sidebar' &&
-    //             item.permission !== '' &&
-    //             permissions[item.permission - 1].status === '1'
-    //         ));
-    //     } else {
-    //         sideBarItems = items.filter(item => item.type === 'sidebar');
-    //     }
+        if (getLocalItem('role') === "student") {
+            //sideBarItems.push(items.find(item => item.path === '/'));
+            sideBarItems = sideBarItems.concat(items.filter(item =>
+                item.type === 'sidebar'
+            ));
+        } else {
+            sideBarItems = items.filter(item => item.type === 'sidebar');
+        }
     // }
     const theme = useTheme();
 

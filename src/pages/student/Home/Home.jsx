@@ -1,13 +1,11 @@
 import React from "react";
 import "./Home.css";
-import { getLocalItem } from "../../../stores/LocalStorage";
+import Schedule from "../../../components/Schedule/Schedule";
 
 function Home() {
     
     return (
-        <>
-            {getLocalItem("role") === 'student' ? 'Student Home' : 'Teacher Home'}
-        </>
+        <Schedule/>
     );
 }
 
