@@ -65,7 +65,7 @@ export default function Layout() {
         <CssBaseline />
         <Header pageName={getPageName(pathName)} />
         <NewSidebar open={showSidebar} handleDrawerClose={handleDrawerClose} />
-        <Main open={showSidebar} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop:'10px'}}>
+        <Main open={showSidebar} sx={{ width:"100%",display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop:'10px'}}>
           <DrawerHeader />
           <Outlet />
         </Main>
