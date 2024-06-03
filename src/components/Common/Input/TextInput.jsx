@@ -10,6 +10,7 @@ const labelText = {
     address: "Địa chỉ",
     home_town: "Quê quán",
     student_class: "Lớp sinh viên",
+    class_name: "Lớp sinh viên",
     system: "Hệ",
     unit: "Khoa/Viện"
 };

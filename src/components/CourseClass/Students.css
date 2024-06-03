@@ -1,0 +1,31 @@
+.student-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: start; 
+    align-items: center;
+    padding: 10px;
+}
+
+.student-avatar {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #000;
+}
+
+.student-title {
+    margin-left: 15px!important;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.student-title p {
+    text-align: start;
+}
+
+
+.student-card:hover {
+    cursor: pointer;
+    background-color: #2c98f0;
+    color: #fff;
+}

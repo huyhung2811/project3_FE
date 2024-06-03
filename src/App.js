@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import { Navigate } from 'react-router-dom';
 import { ProfileProvider } from './stores/Context/ProfileContext';
 import { LayoutProvider } from './stores/Context/LayoutContext';
-import { PermissionProvider } from './stores/Context/PermissionContext';
 import { items } from './stores/ItemPath/ItemPath';
 import { SnackbarProvider } from 'notistack';
 import NewLayOut from './components/Layout/Layout';
