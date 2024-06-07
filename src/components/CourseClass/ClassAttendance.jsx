@@ -23,8 +23,6 @@ export default function AttendanceTab({ classCode }) {
         fetchData();
     }, [classCode]);
 
-    console.log(attendances.length);
-
     return (
         attendances.length > 0 ? (
             <Table sx={{ minWidth: 650, width: "100%" }} aria-label="attendance table">
