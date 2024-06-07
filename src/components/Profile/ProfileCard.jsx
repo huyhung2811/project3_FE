@@ -26,7 +26,6 @@ function ProfileCard({ isEdit }) {
         home_town: profile.home_town,
         avatar: '',
     });
-    console.log(data);
     const inputAvatarRef = React.useRef(null);
     const { enqueueSnackbar } = useSnackbar();
 

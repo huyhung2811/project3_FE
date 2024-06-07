@@ -1,6 +1,6 @@
 import './App.css';
 import Login from './pages/guest/login';
-import Home from './pages/student/Home/Home';
+import Home from './pages/student/Schedule/Home';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { ProfileProvider } from './stores/Context/ProfileContext';

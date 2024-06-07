@@ -10,12 +10,15 @@ const labelText = {
     start_time: "Giờ bắt đầu",
     end_time: "Giờ kết thúc",
     systems: "Hệ",
+    system: "Hệ",
     type: "Loại",
     teacher_name: "Giáo viên hướng dẫn",
     students_number: "Số sinh viên",
     semester: "Kỳ học",
     description: "Mô tả",
-    school_day: "Ngày học"
+    school_day: "Ngày học",
+    unit: "Đơn vị",
+    class_name: "Tên Lớp"
 };
 
 const dayOfWeekMap = {
