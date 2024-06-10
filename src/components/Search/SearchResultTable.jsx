@@ -5,13 +5,23 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { TableHeaderStudent, TableHeaderTeacher, TableHeaderCourse, TableHeaderCourseClass } from "./TableHeader";
 import { Avatar } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const tableType = {
     "student": <TableHeaderStudent />,
     "teacher": <TableHeaderTeacher />,
     "course": <TableHeaderCourse />,
     "course-class": <TableHeaderCourseClass />
 }
+
+const dayOfWeekMap = {
+    Monday: 'Thứ 2',
+    Tuesday: 'Thứ 3',
+    Wednesday: 'Thứ 4',
+    Thursday: 'Thứ 5',
+    Friday: 'Thứ 6',
+    Saturday: 'Thứ 7',
+    Sunday: 'Chủ Nhật'
+};
 
 export function SearchResultStudentTable({ value, error, type }) {
     console.log(type)
@@ -118,14 +128,27 @@ export function SearchResultCourseTable({ value, error, type }) {
 }
 
 export function SearchResultCourseClassTable({ value, error, type }) {
-    console.log(type)
+    const navigate = useNavigate()
+    const handleRowClick = (class_code) => {
+        navigate(`/course-class/${class_code}`);
+    };
+
     return (
         <div style={{ marginTop: "10px" }}>
             {value && <Table sx={{ minWidth: 650, width: "100%" }} aria-label="result table">
                 {tableType[type]}
                 <TableBody>
                     <TableRow
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                         sx={{ 
+                            '&:last-child td, &:last-child th': { border: 0 }, 
+                            cursor: 'pointer',
+                            '&:hover': {
+                                fontWeight: 'bold',
+                                backgroundColor: '#f5f5f5'
+                            }
+                        }}
+                        title={"Xem chi tiết"}
+                        onClick={() => handleRowClick(value.class_code)}
                     >
                         <TableCell component="th" scope="row">
                             {1}
@@ -134,13 +157,8 @@ export function SearchResultCourseClassTable({ value, error, type }) {
                         <TableCell align="left">{value.course_code}</TableCell>
                         <TableCell align="left">{value.name}</TableCell>
                         <TableCell align="left">{value.teacher_name}</TableCell>
-                        <TableCell align="left">{value.type}</TableCell>
-                        <TableCell align="left">
-                            {value.systems.map((system) => {
-                                return <p>{system.name}</p>
-                            })}
-                        </TableCell>
-                        <TableCell align="left">{value.education_format}</TableCell>
+                        <TableCell align="left">{dayOfWeekMap[value.school_day]}</TableCell>
+                        <TableCell align="left">{value.start_time + " - " + value.end_time }</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>}

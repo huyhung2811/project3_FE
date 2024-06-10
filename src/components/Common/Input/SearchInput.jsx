@@ -15,8 +15,8 @@ export default function SearchInput({ handleSearchInputChange, defaultValue, han
       }}
     >
       <TextField
-        className="input"
-        id="input"
+        className="input-search"
+        id="input-search"
         name="input"
         variant="outlined"
         placeholder={defaultValue}

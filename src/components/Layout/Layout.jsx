@@ -37,12 +37,12 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 function getPageName(path) {
   for (const item of items) {
-    const routeRegex = new RegExp(`^${item.path.replace(/:\w+/g, '\\w+')}$`);
+    const routeRegex = new RegExp(`^${item.path.replace(/:[^/]+/g, '[^/]+')}$`);
     if (routeRegex.test(path)) {
       return item.name;
     }
   }
-  return 'Unknown Page';
+  return 'Unknown Page';  
 }
 
 

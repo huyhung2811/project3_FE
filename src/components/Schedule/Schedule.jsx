@@ -103,12 +103,13 @@ export default function Schedule() {
                     }
                 }}
                 eventClick={function (info) {
-                    //alert('Event: ' + info.event.extendedProps.class_code);
-                    navigate(`/course-class/${info.event.extendedProps.class_code}`);
+                    const eventDate = format(info.event.start, 'yyyy-MM-dd');
+                    const classCode = info.event.extendedProps.class_code;
+                    navigate(`/course-class/${classCode}/${eventDate}`);
                 }}
                 eventMouseEnter={
                     function (info) {
-                        
+
                     }
                 }
                 datesSet={(info) => {

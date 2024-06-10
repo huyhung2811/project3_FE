@@ -43,7 +43,7 @@ export default function Header({ pageName }) {
 
     const handleDrawerOpen = (e) => {
         e.preventDefault();
-        setShowSidebar(!showSidebar);
+        setShowSidebar(!showSidebar);   
     };
 
     const handleOpen = (e) => {

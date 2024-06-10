@@ -4,10 +4,17 @@ export const studentApi = {
     getStudentClass: async function () {
         try {
             const response = await api.get('/student/class',);
-            console.log(response.data);
             return response.data;
         } catch (error) {
             throw error.response.data;   
         }
     },
+    getStudentCourseClasses: async function (date) {
+        try {
+            const response = await api.get('/student/course-class', { params: { date } });
+            return response.data;
+        } catch (error) {
+            throw error.response.data;   
+        }
+    }
 }

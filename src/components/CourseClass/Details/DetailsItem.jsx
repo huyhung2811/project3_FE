@@ -57,17 +57,8 @@ function DetailsItem({ label, value }) {
     return (
         <div className="detail-item" style={{ textAlign: "start" }}>
             <span>
-                <p className="detail-label" style={{ color: "#000", fontSize: "16px", fontWeight: "bold" }}>{labelText[label]}</p>
-                {label === "systems" ? (
-                    <ul>
-                        {value.map(system => (
-                            <li key={system.id}>{system.name}</li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>{displayValue}</p>
-                )}
-                {/* <p>{value}</p> */}
+                <div className="detail-label" style={{ color: "#000", fontSize: "16px", fontWeight: "bold" }}>{labelText[label]}</div>
+                <div>{displayValue}</div>
             </span>
         </div>
     );

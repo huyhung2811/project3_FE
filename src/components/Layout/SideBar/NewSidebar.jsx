@@ -27,18 +27,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function NewSidebar({ open, handleDrawerClose }) {
     const handleRedirect = useRedirect().handleRedirect;
-    // const permissions = usePermission().permissions;
     let sideBarItems = [];
-    // if(permissions){
-        if (getLocalItem('role') === "student") {
-            //sideBarItems.push(items.find(item => item.path === '/'));
-            sideBarItems = sideBarItems.concat(items.filter(item =>
-                item.type === 'sidebar'
-            ));
-        } else {
-            sideBarItems = items.filter(item => item.type === 'sidebar');
-        }
-    // }
+    sideBarItems = sideBarItems.concat(items.filter(item =>
+        item.type === 'sidebar' 
+    ));
+    if (getLocalItem('role') === "student") {
+        sideBarItems = sideBarItems.filter(item => item.role === "student" || item.role === "");
+    }
+    if (getLocalItem('role') === "teacher") {
+        sideBarItems = sideBarItems.filter(item => item.role === "teacher" || item.role === "");
+    }
     const theme = useTheme();
 
     return (
@@ -55,7 +53,7 @@ export default function NewSidebar({ open, handleDrawerClose }) {
                     backgroundSize: 'cover',
                     overflowY: 'auto',
                 },
-                
+
             }}
             variant="persistent"
             anchor="left"
@@ -64,14 +62,14 @@ export default function NewSidebar({ open, handleDrawerClose }) {
             <DrawerHeader>
                 <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
                     <Typography variant="h6" component="div">
-                        <img src={Logo} alt="Logo" style={{right: '10px' ,height: '70px', border: '1px solid #707070', borderRadius:'50%'}} />
+                        <img src={Logo} alt="Logo" style={{ right: '10px', height: '70px', border: '1px solid #707070', borderRadius: '50%' }} />
                     </Typography>
                 </Box>
                 <IconButton onClick={handleDrawerClose}>
-                    {theme.direction === 'ltr' ? <FaChevronLeft style={{color: "#fff"}}/> : <FaChevronRight style={{color: "#fff"}}/>}
+                    {theme.direction === 'ltr' ? <FaChevronLeft style={{ color: "#fff" }} /> : <FaChevronRight style={{ color: "#fff" }} />}
                 </IconButton>
             </DrawerHeader>
-            <Divider sx={{borderColor: '#fff'}}/>
+            <Divider sx={{ borderColor: '#fff' }} />
             <List>
                 {sideBarItems.map((item) => (
                     <ListItem key={item.path} disablePadding>

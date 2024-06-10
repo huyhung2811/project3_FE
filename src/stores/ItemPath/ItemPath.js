@@ -2,13 +2,16 @@ import { ImProfile } from "react-icons/im";
 import { TbPasswordUser } from "react-icons/tb";
 import { IoCalendar } from "react-icons/io5";
 import { MdOutlineClass } from "react-icons/md";
+import { SlNote } from "react-icons/sl";
 import Profile from "../../pages/Profile/Profile";
 import EditProfile from "../../pages/Profile/EditProfile";
-import CourseClassDetails from "../../pages/student/CourseClass/Details";
+import {CourseClassDetails, CourseClassDetailsDay} from "../../pages/student/CourseClass/DetailsDay";
 import Search from "../../pages/Search/Search";
 import { FaSearch } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
 import StudentClass from "../../pages/student/StudentClass";
+import StudentCourseClasses from "../../pages/student/CourseClass/StudentCourseClasses";
+import RequestDayOff from "../../pages/DayOff/RequestDayOff";
 
 export const items = [
     {
@@ -16,7 +19,7 @@ export const items = [
         name: 'Thời khóa biểu',
         icon: <IoCalendar className = 'sidebar-icon'/>,
         type: 'sidebar', 
-        role: 'student',
+        role: '',
     },
     {
         path: '/search',
@@ -53,9 +56,17 @@ export const items = [
     {
         path: '/course-class/:classCode',
         name: 'Chi tiết lớp học',
-        icon: <MdOutlineClass className = 'sidebar-icon'/>,
+        icon: <MdOutlineClass className='sidebar-icon' />,
         type: '',
-        element: <CourseClassDetails/>,
+        element: <CourseClassDetails />,
+        role: ''
+    },
+    {
+        path: '/course-class/:classCode/:date',
+        name: 'Chi tiết lớp học',
+        icon: <MdOutlineClass className='sidebar-icon' />,
+        type: '',
+        element: <CourseClassDetailsDay />,
         role: ''
     },
     {
@@ -66,12 +77,20 @@ export const items = [
         element: <StudentClass/>,
         role: "student",
     },
-    // {
-    //     path: '/student/course-class',
-    //     name: 'Lớp học phần',
-    //     icon: '',
-    //     type: '',
-    //     // element: <UserDetails />,
-    //     role: "student",
-    // },
+    {
+        path: '/student/course-class',
+        name: 'Lớp học phần',
+        icon: <MdOutlineClass className = 'sidebar-icon'/>,
+        type: 'sidebar',
+        element: <StudentCourseClasses />,
+        role: "",
+    },
+    {
+        path: '/request-day-off',
+        name: 'Xin nghỉ học',
+        icon: <SlNote className = 'sidebar-icon'/>,
+        type: 'sidebar',
+        element: <RequestDayOff />,
+        role: "",
+    },
 ];

@@ -54,9 +54,8 @@ export function TableHeaderCourseClass(){
                 <TableCell align="left">Mã học phần</TableCell>
                 <TableCell align="left">Tên lớp</TableCell>
                 <TableCell align="left">Giáo viên giảng dạy</TableCell>
-                <TableCell align="left">Loại</TableCell>
-                <TableCell align="left">Hệ</TableCell>
-                <TableCell align="left">Hình thức giảng dạy</TableCell>
+                <TableCell align="left">Ngày học</TableCell>
+                <TableCell align="left">Thời gian</TableCell>
             </TableRow>
         </TableHead>
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import { commonApi } from '../../services/apis/CommonApi';
+import { commonApi } from '../../../services/apis/CommonApi';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
