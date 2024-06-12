@@ -9,6 +9,9 @@ import { useProfile } from '../../../stores/Context/ProfileContext';
 import { useLayout } from '../../../stores/Context/LayoutContext';
 import { DefaultAvatar } from '../../../assets';
 import HeaderPopper from '../../Common/Popper/HeaderPopper';
+import { FaRegBell } from "react-icons/fa";
+import { Badge } from '@mui/material';
+import NotificationsPopper from '../../Common/Popper/NotificationPopper';
 
 const drawerWidth = 300;
 
@@ -37,34 +40,48 @@ const AppBar = styled(MuiAppBar, {
 export default function Header({ pageName }) {
     const { showSidebar, setShowSidebar } = useLayout();
     const [isOpen, setIsOpen] = React.useState(false);
+    const [isShowNotifications, setIsShowNotifications] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [notifyEl, setNotifyEl] = React.useState(null);
     const value = useProfile();
-    const anchorRef = React.useRef(null);
+    const anchorPopperRef = React.useRef(null);
+    const anchorNotificationRef = React.useRef(null);
 
     const handleDrawerOpen = (e) => {
         e.preventDefault();
-        setShowSidebar(!showSidebar);   
+        setShowSidebar(!showSidebar);
     };
 
-    const handleOpen = (e) => {
+    const handlePopperOpen = (e) => {
         e.preventDefault();
         setIsOpen(prev => !prev);
         setAnchorEl(e.currentTarget);
     };
 
+    const handleNotificationsShow = (e) => {
+        e.preventDefault();
+        setIsShowNotifications(prev => !prev);
+        setNotifyEl(e.currentTarget);
+    }
+
     React.useEffect(() => {
         const handleClickOutside = (event) => {
-            if (anchorRef.current && !anchorRef.current.contains(event.target)) {
+            const isClickOutsideAvatar = anchorPopperRef.current && !anchorPopperRef.current.contains(event.target);
+            const isClickOutsideNotification = anchorNotificationRef.current && !anchorNotificationRef.current.contains(event.target);
+            if (isClickOutsideAvatar) {
                 setIsOpen(false);
             }
+            if (isClickOutsideNotification) {
+                setIsShowNotifications(false);
+            }
         };
-
+        
         document.addEventListener('click', handleClickOutside);
 
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
-    }, [anchorRef]);
+    }, [anchorPopperRef, anchorNotificationRef]);
 
     return (
         <AppBar position="fixed" showSidebar={showSidebar}>
@@ -83,9 +100,15 @@ export default function Header({ pageName }) {
                 </Typography>
             </Toolbar>
             <>
-                <div className="header-right">
-                    <HeaderPopper anchorRef={anchorRef} isOpen={isOpen} anchorEl={anchorEl} setIsOpen={setIsOpen} />
-                    {value.profile && <img ref={anchorRef} src={value.profile.avatar ? value.profile.avatar : DefaultAvatar} alt="logo" style={{ marginRight: '10px', width: "60px", height: "60px", borderRadius: '50%', marginTop: '10px' }} onClick={handleOpen} />}
+                <div className="header-right" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <div className="notification-bell" style={{ marginRight: '10px', marginTop: '5px', fontSize: "24px" }}>
+                        <Badge badgeContent={4} color="error" ref={anchorNotificationRef} onClick={handleNotificationsShow}>
+                            < FaRegBell />
+                        </Badge>
+                        <NotificationsPopper isOpen={isShowNotifications} anchorEl={notifyEl}/>
+                    </div>
+                    <HeaderPopper anchorRef={anchorPopperRef} isOpen={isOpen} anchorEl={anchorEl} setIsOpen={setIsOpen} />
+                    {value.profile && <img ref={anchorPopperRef} src={value.profile.avatar ? value.profile.avatar : DefaultAvatar} alt="logo" style={{ marginRight: '10px', width: "60px", height: "60px", borderRadius: '50%', }} onClick={handlePopperOpen} />}
                 </div>
             </>
         </AppBar>
