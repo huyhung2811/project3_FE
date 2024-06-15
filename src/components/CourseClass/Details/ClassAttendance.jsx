@@ -16,7 +16,8 @@ export function AttendanceTabDay({ classCode, day }) {
                     setAttendances(res);
                 } else {
                     const res = await attendanceApi.getClassAttendanceByDay(classCode, day);
-                    setAttendances(res);
+                    console.log(res);
+                    setAttendances(res.attendances);
                 }
             } catch (err) {
                 console.error(err.message);

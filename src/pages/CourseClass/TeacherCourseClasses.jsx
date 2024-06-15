@@ -13,12 +13,12 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { Avatar } from "@mui/material";
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import { dayOffRequestApi } from '../../services/apis/DayOffRequestApi';
+import { courseClassApi } from '../../services/apis/CourseClassApi';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
-import { useProfile } from '../../stores/Context/ProfileContext';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -50,47 +50,30 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'id',
-        label: 'ID',
+        id: 'class_code',
+        label: 'Mã lớp',
     },
     {
-        id: 'student_avatar',
-        label: 'Avatar',
+        id: 'name',
+        label: 'Tên',
     },
     {
-        id: 'student_name',
-        label: 'Tên người gửi',
+        id: 'course_code',
+        label: 'Mã học phần',
     },
     {
-        id: 'day',
-        label: 'Ngày nghỉ',
+        id: 'room',
+        label: 'Phòng',
     },
     {
-        id: 'reason',
-        label: 'Lý do',
+        id: 'school_day',
+        label: 'Ngày học',
     },
     {
-        id: 'created_time',
-        label: 'Ngày tạo',
-    },
-    {
-        id: 'status',
-        label: 'Trạng thái',
+        id: 'time',
+        label: 'Thời gian học',
     },
 ];
-
-const getStatusColor = (status) => {
-    switch (status) {
-        case 'Duyệt':
-            return '#58cc02';
-        case 'Chờ duyệt':
-            return 'yellow';
-        case 'Từ chối':
-            return 'red';
-        default:
-            return 'black';
-    }
-};
 
 function EnhancedTableHead(props) {
     const { order, orderBy, onRequestSort } = props;
@@ -130,16 +113,27 @@ function EnhancedTableToolbar({ semester, handleSemesterChange }) {
         >
             <Typography
                 sx={{ flex: '1 1 100%' }}
-                variant="h5"
+                variant="h4"
                 id="tableTitle"
                 component="div"
             >
-                Yêu cầu xin nghỉ
+                Lớp học phần trong kỳ
             </Typography>
-            {/* <FormControl variant="outlined" sx={{  width:'200px', minWidth: 120, display:'flex', justifyContent:'end', flexDirection:'row', alignItems:'center' }}>
-                <p style={{width: "100px"}}>Học kỳ: </p>
-                
-            </FormControl> */}
+            <FormControl variant="outlined" sx={{ width: '200px', minWidth: 120, display: 'flex', justifyContent: 'end', flexDirection: 'row', alignItems: 'center' }}>
+                <p style={{ width: "100px" }}>Học kỳ: </p>
+                <Select
+                    value={semester}
+                    onChange={handleSemesterChange}
+                    style={{ width: '100%', height: '30px' }}
+                >
+                    <MenuItem value={'2022.1'}>2022.1</MenuItem>
+                    <MenuItem value={'2022.2'}>2022.2</MenuItem>
+                    <MenuItem value={'2022.3'}>2022.3</MenuItem>
+                    <MenuItem value={'2023.1'}>2023.1</MenuItem>
+                    <MenuItem value={'2023.2'}>2023.2</MenuItem>
+                    <MenuItem value={'2023.3'}>2023.3</MenuItem>
+                </Select>
+            </FormControl>
             <Tooltip title="Filter list">
                 <IconButton>
                 </IconButton>
@@ -153,7 +147,15 @@ EnhancedTableToolbar.propTypes = {
     handleSemesterChange: PropTypes.func.isRequired,
 };
 
-export default function RequestDayOffList() {
+const dateSemester = {
+    '2022.1': "2022-10-05",
+    '2022.2': "2023-03-20",
+    '2022.3': "2023-08-01",
+    '2023.1': "2023-09-11",
+    '2023.2': "2024-02-19",
+}
+
+export default function TeacherCourseClasses() {
     const [order, setOrder] = React.useState('asc');
     const [page, setPage] = React.useState(0);
     const [tableDatas, setTableDatas] = React.useState([]);
@@ -162,16 +164,28 @@ export default function RequestDayOffList() {
         const currentDate = dayjs().format('YYYY-MM-DD');
         return currentDate;
     });
+    const [semester, setSemester] = React.useState('');
     const navigate = useNavigate();
-    const value = useProfile();
-    console.log(value.countNotifications);
+
+    const handleSemesterChange = (event) => {
+        console.log(dateSemester[event.target.value]);
+        setDate(dateSemester[event.target.value]);
+    };
 
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await dayOffRequestApi.getTeacherNotifications();
-                console.log(res);
-                setTableDatas(res);
+                const res = await courseClassApi.getTeacherCourseClasses(date);
+                setSemester(res.semester);
+                const newTableDatas = res.course_classes.map(data => ({
+                    class_code: data.class_code,
+                    name: data.name,
+                    course_code: data.course_code,
+                    room: data.room ? data.room : "Không",
+                    school_day: data.school_day ? data.school_day : "Không",
+                    time: data.start_time ? data.start_time + " - " + data.end_time : "Không",
+                }));
+                setTableDatas(newTableDatas);
             } catch (err) {
                 console.error(err);
             }
@@ -197,26 +211,18 @@ export default function RequestDayOffList() {
         [order, page, rowsPerPage, tableDatas],
     );
 
-    const handleRequestClick = (event, requestId, isRead) => {
-        const fetchData = async () => {
-            try {
-                const res = await dayOffRequestApi.changeIsReadRequest(requestId);
-                console.log(isRead);
-                if(isRead === "0") {
-                    value.setCountNotifications(value.countNotifications - 1);
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        fetchData();
-        navigate(`/request-day-off/${requestId}`);
+    const handleClassClick = (event, class_code) => {
+        const currentDate = dayjs().format('YYYY-MM-DD');
+        navigate(`/course-class/${class_code}/${currentDate}`);
     }
 
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2, p: 2 }}>
-                <EnhancedTableToolbar />
+                <EnhancedTableToolbar
+                    semester={semester}
+                    handleSemesterChange={handleSemesterChange}
+                />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750, p: 5 }}
@@ -244,22 +250,21 @@ export default function RequestDayOffList() {
                                                     backgroundColor: '#f5f5f5',
                                                 },
                                             }}
-                                            onClick={(event) => handleRequestClick(event, row.id, row.is_read)}
+                                            onClick={(event) => handleClassClick(event, row.class_code)}
                                         >
                                             <TableCell
                                                 component="th"
                                                 id={labelId}
                                                 scope="row"
-                                                align="left"
+                                                padding="none"
                                             >
-                                                {row.id}
+                                                {row.class_code}
                                             </TableCell>
-                                            <TableCell align="left"><Avatar sx={{ width: '40px', height: '40px', border: '1px solid #000' }} src={row.student_avatar} /></TableCell>
-                                            <TableCell align="left">{row.student_name}</TableCell>
-                                            <TableCell align="left">{row.day}</TableCell>
-                                            <TableCell align="left">{row.reason}</TableCell>
-                                            <TableCell align="left">{row.created_time}</TableCell>
-                                            <TableCell align="center"><p style={{ backgroundColor: getStatusColor(row.status), padding: '0px 5px', borderRadius: '3px', }}>{row.status}</p></TableCell>
+                                            <TableCell align="left">{row.name}</TableCell>
+                                            <TableCell align="left">{row.course_code}</TableCell>
+                                            <TableCell align="left">{row.room}</TableCell>
+                                            <TableCell align="left">{row.school_day}</TableCell>
+                                            <TableCell align="left">{row.time}</TableCell>
                                         </TableRow>
                                     </Tooltip>
                                 );

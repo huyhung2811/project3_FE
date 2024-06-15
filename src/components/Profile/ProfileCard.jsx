@@ -57,8 +57,8 @@ function ProfileCard({ isEdit }) {
         e.preventDefault();
         try {
             const res = await profileAPI.update(data);
-            setProfile(res.data);    
-            enqueueSnackbar('Sửa thành công!', { variant : "success",preventDuplicate: true });
+            setProfile(res.data);
+            enqueueSnackbar('Sửa thành công!', { variant: "success", preventDuplicate: true });
             navigate("/profile");
         } catch (err) {
             console.error(err);
@@ -109,16 +109,17 @@ function ProfileCard({ isEdit }) {
                 }
             />
             <CardContent sx={{ display: 'flex', justifyContent: "center", alignItems: 'center', flexDirection: "column" }}>
-                <Grid container spacing={{ xs: 2}} columns={{ xs: 2, sm: 4, md: 6 }}>
+                <Grid container spacing={{ xs: 2 }} columns={{ xs: 2, sm: 4, md: 6 }}>
                     {Object.entries(profile).map(([key, value], index) => {
                         if (key !== 'avatar') {
                             return (
                                 <Grid item xs={6} md={3} key={index}>
                                     {
-                                        (key === 'address' || key === 'home_town' || key === 'phone') ? 
-                                        <TextInput label={key} value={value} status={!isEdit} action={handleInputChange} /> :
-                                        <TextInput label={key} value={value} status={isEdit} action={handleInputChange} />
-                                        
+                                        isEdit ?
+                                            ((key === 'address' || key === 'home_town' || key === 'phone') ?
+                                                <TextInput label={key} value={value} status={!isEdit} action={handleInputChange} /> :
+                                                <TextInput label={key} value={value} status={isEdit} action={handleInputChange} />)
+                                            : <TextInput label={key} value={value} status={!isEdit} action={handleInputChange} />   
                                     }
                                 </Grid>
                             );

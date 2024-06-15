@@ -11,7 +11,6 @@ import TableRow from '@mui/material/TableRow';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { Avatar } from "@mui/material";
 import FormControl from '@mui/material/FormControl';
@@ -19,6 +18,9 @@ import { dayOffRequestApi } from '../../services/apis/DayOffRequestApi';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { useProfile } from '../../stores/Context/ProfileContext';
+import Button from '@mui/material/Button';
+import { MdAdd } from "react-icons/md";
+import RequestCreateModal from '../../components/DayOff/RequestCreateModal';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -121,7 +123,16 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
 };
 
-function EnhancedTableToolbar({ semester, handleSemesterChange }) {
+function EnhancedTableToolbar() {
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    }
+
     return (
         <Toolbar
             sx={{
@@ -129,20 +140,18 @@ function EnhancedTableToolbar({ semester, handleSemesterChange }) {
             }}
         >
             <Typography
-                sx={{ flex: '1 1 100%' }}
+                sx={{ flex: '1 1 100%', fontWeight: 'bold' }}
                 variant="h5"
                 id="tableTitle"
                 component="div"
             >
                 Yêu cầu xin nghỉ
             </Typography>
-            {/* <FormControl variant="outlined" sx={{  width:'200px', minWidth: 120, display:'flex', justifyContent:'end', flexDirection:'row', alignItems:'center' }}>
-                <p style={{width: "100px"}}>Học kỳ: </p>
-                
-            </FormControl> */}
-            <Tooltip title="Filter list">
-                <IconButton>
-                </IconButton>
+            <Tooltip title="Tạo yêu cầu mới">
+                <Button variant="contained" style={{backgroundColor: '#2c98f0', width:"120px"}} endIcon={<MdAdd />} onClick={handleOpenModal}>
+                    Tạo mới
+                </Button>
+                <RequestCreateModal isOpen={isModalOpen} handleClose={handleCloseModal}/>
             </Tooltip>
         </Toolbar>
     );
@@ -153,7 +162,7 @@ EnhancedTableToolbar.propTypes = {
     handleSemesterChange: PropTypes.func.isRequired,
 };
 
-export default function RequestDayOffList() {
+export default function StudentRequestDayOffList() {
     const [order, setOrder] = React.useState('asc');
     const [page, setPage] = React.useState(0);
     const [tableDatas, setTableDatas] = React.useState([]);
@@ -202,7 +211,7 @@ export default function RequestDayOffList() {
             try {
                 const res = await dayOffRequestApi.changeIsReadRequest(requestId);
                 console.log(isRead);
-                if(isRead === "0") {
+                if (isRead === "0") {
                     value.setCountNotifications(value.countNotifications - 1);
                 }
             } catch (err) {

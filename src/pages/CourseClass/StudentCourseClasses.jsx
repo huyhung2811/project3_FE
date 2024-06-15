@@ -16,8 +16,9 @@ import Tooltip from '@mui/material/Tooltip';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import { studentApi } from '../../../services/apis/StudentApi';
+import { courseClassApi } from '../../services/apis/CourseClassApi';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -62,7 +63,7 @@ const headCells = [
     },
     {
         id: 'teacher_name',
-        label: 'Tên giáo viên',
+        label: 'Giáo viên giảng dạy',
     },
     {
         id: 'room',
@@ -115,31 +116,29 @@ function EnhancedTableToolbar({ semester, handleSemesterChange }) {
             }}
         >
             <Typography
-                sx={{ flex: '1 1 100%' }}
-                variant="h4"
+                sx={{ flex: '1 1 100%', fontWeight: 'bold' }}
+                variant="h5"
                 id="tableTitle"
                 component="div"
             >
                 Lớp học phần trong kỳ
             </Typography>
-            <FormControl variant="outlined" sx={{  width:'200px', minWidth: 120, display:'flex', justifyContent:'end', flexDirection:'row', alignItems:'center' }}>
-                <p style={{width: "100px"}}>Học kỳ: </p>
-                <Select
-                    value={semester}
-                    onChange={handleSemesterChange}
-                    style={{width: '100%', height: '30px'}}
-                >
-                    <MenuItem value={'2022.1'}>2022.1</MenuItem>
-                    <MenuItem value={'2022.2'}>2022.2</MenuItem>
-                    <MenuItem value={'2022.3'}>2022.3</MenuItem>
-                    <MenuItem value={'2023.1'}>2023.1</MenuItem>
-                    <MenuItem value={'2023.2'}>2023.2</MenuItem>
-                    <MenuItem value={'2023.3'}>2023.3</MenuItem>
-                </Select>
-            </FormControl>
-            <Tooltip title="Filter list">
-                <IconButton>
-                </IconButton>
+            <Tooltip title="Chọn kỳ học">
+                <FormControl variant="outlined" sx={{ width: '200px', minWidth: 120, display: 'flex', justifyContent: 'end', flexDirection: 'row', alignItems: 'center' }}>
+                    <p style={{ width: "100px" }}>Học kỳ: </p>
+                    <Select
+                        value={semester}
+                        onChange={handleSemesterChange}
+                        style={{ width: '100%', height: '30px' }}
+                    >
+                        <MenuItem value={'2022.1'}>2022.1</MenuItem>
+                        <MenuItem value={'2022.2'}>2022.2</MenuItem>
+                        <MenuItem value={'2022.3'}>2022.3</MenuItem>
+                        <MenuItem value={'2023.1'}>2023.1</MenuItem>
+                        <MenuItem value={'2023.2'}>2023.2</MenuItem>
+                        <MenuItem value={'2023.3'}>2023.3</MenuItem>
+                    </Select>
+                </FormControl>
             </Tooltip>
         </Toolbar>
     );
@@ -168,7 +167,7 @@ export default function StudentCourseClasses() {
         return currentDate;
     });
     const [semester, setSemester] = React.useState('');
-
+    const navigate = useNavigate();
     const handleSemesterChange = (event) => {
         console.log(dateSemester[event.target.value]);
         setDate(dateSemester[event.target.value]);
@@ -177,7 +176,7 @@ export default function StudentCourseClasses() {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await studentApi.getStudentCourseClasses(date);
+                const res = await courseClassApi.getStudentCourseClasses(date);
                 setSemester(res.semester)
                 const newTableDatas = res.course_classes.map(data => ({
                     class_code: data.class_code,
@@ -214,6 +213,10 @@ export default function StudentCourseClasses() {
         [order, page, rowsPerPage, tableDatas],
     );
 
+    const handleClassClick = (event, class_code) => {
+        navigate(`/course-class/${class_code}`);
+    }
+
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2, p: 2 }}>
@@ -235,34 +238,37 @@ export default function StudentCourseClasses() {
                             {visibleRows.map((row, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 return (
-                                    <TableRow
-                                        hover
-                                        role="checkbox"
-                                        tabIndex={-1}
-                                        key={row.class_code}
-                                        sx={{
-                                            cursor: 'pointer',
-                                            '&:hover': {
-                                                fontWeight: 'bold',
-                                                backgroundColor: '#f5f5f5',
-                                            },
-                                        }}
-                                    >
-                                        <TableCell
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                            padding="none"
+                                    <Tooltip title="Click để xem chi tiết" arrow placement="top">
+                                        <TableRow
+                                            hover
+                                            role="checkbox"
+                                            tabIndex={-1}
+                                            key={row.class_code}
+                                            sx={{
+                                                cursor: 'pointer',
+                                                '&:hover': {
+                                                    fontWeight: 'bold',
+                                                    backgroundColor: '#f5f5f5',
+                                                },
+                                            }}
+                                            onClick={(event) => handleClassClick(event, row.class_code)}
                                         >
-                                            {row.class_code}
-                                        </TableCell>
-                                        <TableCell align="left">{row.name}</TableCell>
-                                        <TableCell align="left">{row.course_code}</TableCell>
-                                        <TableCell align="left">{row.teacher_name}</TableCell>
-                                        <TableCell align="left">{row.room}</TableCell>
-                                        <TableCell align="left">{row.school_day}</TableCell>
-                                        <TableCell align="left">{row.time}</TableCell>
-                                    </TableRow>
+                                            <TableCell
+                                                component="th"
+                                                id={labelId}
+                                                scope="row"
+                                                padding="none"
+                                            >
+                                                {row.class_code}
+                                            </TableCell>
+                                            <TableCell align="left">{row.name}</TableCell>
+                                            <TableCell align="left">{row.course_code}</TableCell>
+                                            <TableCell align="left">{row.teacher_name}</TableCell>
+                                            <TableCell align="left">{row.room}</TableCell>
+                                            <TableCell align="left">{row.school_day}</TableCell>
+                                            <TableCell align="left">{row.time}</TableCell>
+                                        </TableRow>
+                                    </Tooltip>
                                 );
                             })}
                         </TableBody>

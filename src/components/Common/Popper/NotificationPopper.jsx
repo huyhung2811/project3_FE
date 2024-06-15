@@ -9,46 +9,51 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useSnackbar } from "notistack";
 import { getLocalItem } from '../../../stores/LocalStorage';
+import { useNavigate } from 'react-router-dom';
+import { dayOffRequestApi } from '../../../services/apis/DayOffRequestApi';
 
-const initialLeaveRequests = [
-    { id: 1, studentName: 'John Doe', reason: 'Medical Leave', date: '2024-06-10', mutualFriends: 3, hoursAgo: 15, read: false },
-    { id: 2, studentName: 'Jane Smith', reason: 'Family Event', date: '2024-06-12', mutualFriends: 2, hoursAgo: 20, read: false },
-    { id: 3, studentName: 'Emily Johnson', reason: 'Personal Leave', date: '2024-06-11', mutualFriends: 1, hoursAgo: 10, read: false },
-    { id: 4, studentName: 'Michael Brown', reason: 'School Event', date: '2024-06-12', mutualFriends: 5, hoursAgo: 8, read: false },
-    { id: 5, studentName: 'Sarah Davis', reason: 'Family Trip', date: '2024-06-09', mutualFriends: 4, hoursAgo: 25, read: false },
-    { id: 6, studentName: 'James Wilson', reason: 'Health Issue', date: '2024-06-08', mutualFriends: 3, hoursAgo: 30, read: false },
-    { id: 7, studentName: 'James Wilson', reason: 'Health Issue', date: '2024-06-08', mutualFriends: 3, hoursAgo: 30, read: true },
-];
-
-function TeacherNotification({ isOpen, anchorEl }) {
-    const [leaveRequests, setLeaveRequests] = useState(initialLeaveRequests);
+function TeacherNotification({ isOpen, anchorEl, countNotifications, setCountNotifications }) {
+    const [leaveRequests, setLeaveRequests] = useState([]);
     const [tabValue, setTabValue] = useState(0);
     const { enqueueSnackbar } = useSnackbar();
+    const navigate = useNavigate();
 
-    const handleAccept = (id) => {
-        setLeaveRequests(prevRequests =>
-            prevRequests.map(request =>
-                request.id === id ? { ...request, read: true } : request
-            )
-        );
-        enqueueSnackbar('Leave request accepted', { variant: 'success' });
-    };
-
-    const handleReject = (id) => {
-        setLeaveRequests(prevRequests =>
-            prevRequests.map(request =>
-                request.id === id ? { ...request, read: true } : request
-            )
-        );
-        enqueueSnackbar('Leave request rejected', { variant: 'error' });
-    };
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await dayOffRequestApi.getTeacherNotifications();
+                setLeaveRequests(res);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        if (isOpen) {
+            fetchData();
+        }
+    }, [isOpen,countNotifications]);
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
 
-    const unreadRequests = leaveRequests.filter(request => !request.read);
-    const displayedRequests = tabValue === 0 ? unreadRequests : leaveRequests;
+    const unreadRequests = leaveRequests.filter(request => request.is_read === "0");
+    const allRequests = leaveRequests.sort((a, b) => a.is_read - b.is_read);
+    const displayedRequests = tabValue === 0 ? unreadRequests : allRequests;
+
+    const handleRequestClick = (event, requestId, isRead) => {
+        const fetchData = async () => {
+            try {
+                const res = await dayOffRequestApi.changeIsReadRequest(requestId);
+                if(isRead === "0") {
+                    setCountNotifications(countNotifications - 1);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchData();
+        navigate(`/request-day-off/${requestId}`);
+    }
 
     const handleClickInside = (event) => {
         event.stopPropagation();
@@ -76,17 +81,18 @@ function TeacherNotification({ isOpen, anchorEl }) {
                             {displayedRequests.length > 0 ? (
                                 <ul style={{ listStyle: 'none', padding: 0 }}>
                                     {displayedRequests.map((request) => (
-                                        <li key={request.id} style={{ marginBottom: '10px', backgroundColor: request.read ? '#e0e0e0' : '#ffffff', padding: '10px', borderRadius: '5px' }}>
+                                        <li key={request.id} style={{ marginBottom: '10px', backgroundColor: request.is_read === "1" ? '#e0e0e0' : '#ffffff', padding: '10px', borderRadius: '5px' }} onClick={(event) => handleRequestClick(event, request.id, request.is_read)}>
                                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                <Avatar sx={{ marginRight: '10px' }}>{request.studentName[0]}</Avatar>
+                                                <Avatar sx={{ marginRight: '10px' }}>{request.student_name[0]}</Avatar>
                                                 <div>
                                                     <Typography variant="body2">
-                                                        <strong>{request.studentName}</strong> đã gửi cho bạn yêu cầu nghỉ phép. <br />
-                                                        {request.hoursAgo} giờ trước<br />
+                                                        <strong>{request.student_name}</strong> đã gửi yêu cầu xin nghỉ vào ngày {request.day}. <br />
+                                                        Lý do: {request.reason}<br />
+                                                        {request.elapsed_time}<br />
                                                     </Typography>
                                                 </div>
                                             </div>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                                            {/* <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                                                 <Button 
                                                     onClick={() => handleAccept(request.id)}
                                                     variant="contained"
@@ -102,7 +108,7 @@ function TeacherNotification({ isOpen, anchorEl }) {
                                                 >
                                                     Xóa
                                                 </Button>
-                                            </div>
+                                            </div> */}
                                         </li>
                                     ))}
                                 </ul>
@@ -117,12 +123,49 @@ function TeacherNotification({ isOpen, anchorEl }) {
     );
 }
 
-function StudentNotification({ isOpen, anchorEl }) {
-    const [leaveRequests, setLeaveRequests] = useState(initialLeaveRequests);
+function StudentNotification({ isOpen, anchorEl, countNotifications, setCountNotifications  }) {
+    const [leaveRequests, setLeaveRequests] = useState([]);
+    const [tabValue, setTabValue] = useState(0);
     const { enqueueSnackbar } = useSnackbar();
+    const navigate = useNavigate();
 
-    const displayedRequests = leaveRequests.filter(request => request.read).sort((a, b) => new Date(b.date) - new Date(a.date));
-    
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await dayOffRequestApi.getTeacherNotifications();
+                setLeaveRequests(res);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        if (isOpen) {
+            fetchData();
+        }
+    }, [isOpen,countNotifications]);
+
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+    };
+
+    const unreadRequests = leaveRequests.filter(request => request.is_read === "0");
+    const allRequests = leaveRequests.sort((a, b) => a.is_read - b.is_read);
+    const displayedRequests = tabValue === 0 ? unreadRequests : allRequests;
+
+    const handleRequestClick = (event, requestId, isRead) => {
+        const fetchData = async () => {
+            try {
+                const res = await dayOffRequestApi.changeIsReadRequest(requestId);
+                if(isRead === "0") {
+                    setCountNotifications(countNotifications - 1);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchData();
+        navigate(`/request-day-off/${requestId}`);
+    }
+
     const handleClickInside = (event) => {
         event.stopPropagation();
     };
@@ -141,21 +184,42 @@ function StudentNotification({ isOpen, anchorEl }) {
                         <Typography variant="h6" gutterBottom>
                             Thông báo
                         </Typography>
+                        <Tabs value={tabValue} onChange={handleTabChange} aria-label="notification tabs">
+                            <Tab label="Chưa đọc" />
+                            <Tab label="Tất cả" />
+                        </Tabs>
                         <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                             {displayedRequests.length > 0 ? (
                                 <ul style={{ listStyle: 'none', padding: 0 }}>
                                     {displayedRequests.map((request) => (
-                                        <li key={request.id} style={{ marginBottom: '10px', backgroundColor: '#e0e0e0', padding: '10px', borderRadius: '5px' }}>
+                                        <li key={request.id} style={{ marginBottom: '10px', backgroundColor: request.is_read === "1" ? '#e0e0e0' : '#ffffff', padding: '10px', borderRadius: '5px' }} onClick={(event) => handleRequestClick(event, request.id, request.is_read)}>
                                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                <Avatar sx={{ marginRight: '10px' }}>{request.teacherName[0]}</Avatar>
+                                                <Avatar sx={{ marginRight: '10px' }}>{request.student_name[0]}</Avatar>
                                                 <div>
                                                     <Typography variant="body2">
-                                                        Giáo viên <strong>{request.teacherName}</strong> đã {request.action.toLowerCase()} yêu cầu xin nghỉ của bạn.<br />
+                                                        <strong>{request.student_name}</strong> đã gửi yêu cầu xin nghỉ vào ngày {request.day}. <br />
                                                         Lý do: {request.reason}<br />
-                                                        Thời gian: {request.hoursAgo} giờ trước
+                                                        {request.elapsed_time}<br />
                                                     </Typography>
                                                 </div>
                                             </div>
+                                            {/* <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                                                <Button 
+                                                    onClick={() => handleAccept(request.id)}
+                                                    variant="contained"
+                                                    sx={{marginRight: 1, backgroundColor: '#2c98f0', width: '200px'}}
+                                                >
+                                                    Xác nhận
+                                                </Button>
+                                                <Button 
+                                                    onClick={() => handleReject(request.id)}
+                                                    variant="contained"
+                                                    color='error'
+                                                    sx={{width: '200px', backgroundColor: '#bdbdbd'}}
+                                                >
+                                                    Xóa
+                                                </Button>
+                                            </div> */}
                                         </li>
                                     ))}
                                 </ul>
@@ -170,11 +234,11 @@ function StudentNotification({ isOpen, anchorEl }) {
     );
 }
 
-function NotificationsPopper({ isOpen, anchorEl }) {
+function NotificationsPopper({ isOpen, anchorEl, countNotifications, setCountNotifications }) {
     const role = getLocalItem('role');
 
     return role === 'teacher' ? (
-        <TeacherNotification isOpen={isOpen} anchorEl={anchorEl} />
+        <TeacherNotification isOpen={isOpen} anchorEl={anchorEl} countNotifications={countNotifications} setCountNotifications={setCountNotifications} />
     ) : (
         <StudentNotification isOpen={isOpen} anchorEl={anchorEl} />
     );

@@ -12,7 +12,8 @@ const labelText = {
     student_class: "Lớp sinh viên",
     class_name: "Lớp sinh viên",
     system: "Hệ",
-    unit: "Khoa/Viện"
+    unit: "Khoa/Viện",
+    teacher_code: "Mã giáo viên",
 };
 
 function TextInput({ label, value, status, action }) {
@@ -23,7 +24,7 @@ function TextInput({ label, value, status, action }) {
                 className="input"
                 id={`input-${label}`}
                 name={label}
-                disabled = {status && !(['home_town', 'address', 'phone'].includes(label))}
+                disabled = {status}
                 variant="outlined"
                 defaultValue={value}
                 InputProps={{

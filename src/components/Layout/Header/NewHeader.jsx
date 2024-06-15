@@ -12,6 +12,7 @@ import HeaderPopper from '../../Common/Popper/HeaderPopper';
 import { FaRegBell } from "react-icons/fa";
 import { Badge } from '@mui/material';
 import NotificationsPopper from '../../Common/Popper/NotificationPopper';
+import Pusher from 'pusher-js';
 
 const drawerWidth = 300;
 
@@ -47,6 +48,17 @@ export default function Header({ pageName }) {
     const anchorPopperRef = React.useRef(null);
     const anchorNotificationRef = React.useRef(null);
 
+    React.useEffect(() => {
+        const pusher = new Pusher('ac339023c6f200c43c03', {
+            cluster: 'ap1',
+        });
+
+        const channel = pusher.subscribe('day-off-request');
+        channel.bind('request', function (data) {
+            value.setIsHasNotifications((prev) => !prev)
+        });
+    },[]);
+
     const handleDrawerOpen = (e) => {
         e.preventDefault();
         setShowSidebar(!showSidebar);
@@ -75,7 +87,7 @@ export default function Header({ pageName }) {
                 setIsShowNotifications(false);
             }
         };
-        
+
         document.addEventListener('click', handleClickOutside);
 
         return () => {
@@ -102,10 +114,10 @@ export default function Header({ pageName }) {
             <>
                 <div className="header-right" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                     <div className="notification-bell" style={{ marginRight: '10px', marginTop: '5px', fontSize: "24px" }}>
-                        <Badge badgeContent={4} color="error" ref={anchorNotificationRef} onClick={handleNotificationsShow}>
+                        <Badge badgeContent={value.countNotifications} color="error" ref={anchorNotificationRef} onClick={handleNotificationsShow}>
                             < FaRegBell />
                         </Badge>
-                        <NotificationsPopper isOpen={isShowNotifications} anchorEl={notifyEl}/>
+                        <NotificationsPopper isOpen={isShowNotifications} anchorEl={notifyEl} countNotifications={value.countNotifications} setCountNotifications={value.setCountNotifications} />
                     </div>
                     <HeaderPopper anchorRef={anchorPopperRef} isOpen={isOpen} anchorEl={anchorEl} setIsOpen={setIsOpen} />
                     {value.profile && <img ref={anchorPopperRef} src={value.profile.avatar ? value.profile.avatar : DefaultAvatar} alt="logo" style={{ marginRight: '10px', width: "60px", height: "60px", borderRadius: '50%', }} onClick={handlePopperOpen} />}
