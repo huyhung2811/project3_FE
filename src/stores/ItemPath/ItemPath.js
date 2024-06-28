@@ -4,6 +4,7 @@ import { IoCalendar } from "react-icons/io5";
 import { MdOutlineClass } from "react-icons/md";
 import { FaRegListAlt } from "react-icons/fa";
 import { SlNote } from "react-icons/sl";
+import { MdOutlineDeviceUnknown } from "react-icons/md";
 import Profile from "../../pages/Profile/Profile";
 import EditProfile from "../../pages/Profile/EditProfile";
 import {
@@ -13,12 +14,15 @@ import {
 import Search from "../../pages/Search/Search";
 import { FaSearch } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
-import StudentClass from "../../pages/student/StudentClass";
+import StudentClass from "../../pages/StudentClass/StudentClass";
 import StudentCourseClasses from "../../pages/CourseClass/StudentCourseClasses";
 import StudentRequestDayOff from "../../pages/DayOff/StudentRequestDayOff";
 import RequestDayOffList from "../../pages/DayOff/RequestDayOffList";
 import DayOffDetail from "../../pages/DayOff/DayOffDetails";
 import TeacherCourseClasses from "../../pages/CourseClass/TeacherCourseClasses";
+import DeviceList from "../../pages/Device/DeviceList";
+import UserManager from "../../pages/UserManager/UserManager";
+import { FaUserCog } from "react-icons/fa";
 
 export const items = [
   {
@@ -123,5 +127,21 @@ export const items = [
     type: "",
     element: <DayOffDetail />,
     role: "",
+  },
+  {
+    path: "/users",
+    name: "Quản lý người dùng",
+    icon: <FaUserCog className="sidebar-icon" />,
+    type: "sidebar",
+    element: <UserManager />,
+    role: "admin",
+  },
+  {
+    path: "/device",
+    name: "Quản lý thiết bị",
+    icon: <MdOutlineDeviceUnknown className="sidebar-icon" />,
+    type: "sidebar",
+    element: <DeviceList />,
+    role: "admin",
   },
 ];

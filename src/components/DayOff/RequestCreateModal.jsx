@@ -1,16 +1,21 @@
 import React from 'react';
 import { useState } from 'react';
-import { TextField } from '@mui/material';
+import { TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import { IoMdClose } from "react-icons/io";
-import Autocomplete from '@mui/material/Autocomplete';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { scheduleApi } from '../../services/apis/ScheduleApi';
+import dayjs from 'dayjs';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import { dayOffRequestApi } from '../../services/apis/DayOffRequestApi';
+import { useSnackbar } from 'notistack';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -26,14 +31,48 @@ export default function RequestCreateModal({ isOpen, handleClose }) {
     const [classOptions, setClassOptions] = useState([]);
     const [selectedClass, setSelectedClass] = useState('');
     const [reason, setReason] = useState('');
+    const { enqueueSnackbar } = useSnackbar();
+
     const handleDateChange = (date) => {
-        setSelectedDate(date);
-        setClassOptions(['Class 1', 'Class 2', 'Class 3']);
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : '';
+        setSelectedDate(formattedDate);
+        const fetchScheduleData = async (view, date) => {
+            try {
+                const res = await scheduleApi.getScheduleInDay(date);
+                console.log(res.schedule_in_day[0].class_code);
+                setClassOptions(res.schedule_in_day);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchScheduleData('dayGridMonth', formattedDate);
     };
-    const handleClassChange = (event, value) => setSelectedClass(value);
+
+    const handleCreateRequest = async () => {
+        try {
+            const res = await dayOffRequestApi.createRequest(selectedClass, selectedDate, reason);
+            enqueueSnackbar(res, { variant: "success", preventDuplicate: true });
+            window.location.reload();
+        } catch (err) {
+            enqueueSnackbar(err, { variant: "error", preventDuplicate: true });
+        }
+    }
+
+    const handleClassChange = (event) => {
+        setSelectedClass(event.target.value);
+    };
+
+    const handleCloseModal = (event) => {
+        setSelectedDate(null);
+        setClassOptions([]);
+        setSelectedClass('');
+        setReason('');
+        handleClose();
+    }
+
     return (
         <BootstrapDialog
-            onClose={handleClose}
+            onClose={handleCloseModal}
             aria-labelledby="customized-dialog-title"
             open={isOpen}
             fullWidth={true}
@@ -44,7 +83,7 @@ export default function RequestCreateModal({ isOpen, handleClose }) {
             </DialogTitle>
             <IconButton
                 aria-label="close"
-                onClick={handleClose}
+                onClick={handleCloseModal}
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -55,29 +94,31 @@ export default function RequestCreateModal({ isOpen, handleClose }) {
                 <IoMdClose />
             </IconButton>
             <DialogContent dividers>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} style={{ width: '100%' }}>
                     <DatePicker
                         label="Chọn ngày nghỉ"
-                        value={selectedDate}
+                        sx={{ width: '100%' }}
+                        value={selectedDate ? dayjs(selectedDate) : null}
                         onChange={handleDateChange}
-                        renderInput={(params) => <TextField {...params} fullWidth margin="normal" />}
                     />
                 </LocalizationProvider>
-                <Autocomplete
-                    options={classOptions}
-                    value={selectedClass}
-                    onChange={handleClassChange}
-                    disabled={!selectedDate}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Chọn lớp học"
-                            fullWidth
-                            margin="normal"
-                            disabled={!selectedDate}
-                        />
-                    )}
-                />
+                <FormControl fullWidth margin="normal" disabled={!selectedDate}>
+                    <InputLabel id="class-label">Chọn lớp học</InputLabel>
+                    <Select
+                        labelId="class-label"
+                        id="class-select"
+                        value={selectedClass}
+                        onChange={handleClassChange}
+                        label="Chọn lớp học"
+                        disabled={!selectedDate}
+                    >
+                        {classOptions.map((option) => (
+                            <MenuItem key={option.class_code} value={option.class_code}>
+                                {`${option.class_code} - ${option.name}`}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 <TextField
                     margin="normal"
                     required
@@ -90,9 +131,10 @@ export default function RequestCreateModal({ isOpen, handleClose }) {
                     disabled={!selectedClass}
                 />
             </DialogContent>
+            <DialogActions>
+                <Button onClick={handleCloseModal}>Hủy</Button>
+                <Button type="submit" onClick={handleCreateRequest}>Gửi</Button>
+            </DialogActions>
         </BootstrapDialog>
     );
 }
-
-
-

@@ -37,6 +37,9 @@ export default function NewSidebar({ open, handleDrawerClose }) {
     if (getLocalItem('role') === "teacher") {
         sideBarItems = sideBarItems.filter(item => item.role === "teacher" || item.role === "");
     }
+    if (getLocalItem('role') === "admin") {
+        sideBarItems = sideBarItems.filter(item => item.role === "admin");
+    }
     const theme = useTheme();
 
     return (
@@ -48,9 +51,7 @@ export default function NewSidebar({ open, handleDrawerClose }) {
                     width: drawerWidth,
                     boxSizing: 'border-box',
                     padding: '10px',
-                    backgroundImage: 'url(https://i.pinimg.com/236x/a4/b8/d1/a4b8d1c756ca9e06aa4f5e50ca84ef25.jpg)',
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
+                    backgroundColor: '#001529',
                     overflowY: 'auto',
                 },
 

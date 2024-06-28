@@ -32,5 +32,13 @@ export const dayOffRequestApi = {
         } catch (error) {
             throw error.response.data;
         }
+    },
+    createRequest: async function (class_code, day, reason) {
+        try {
+            const response = await api.post('/day-off/create', {class_code,day, reason});
+            return response.data.message;
+        } catch (error) {
+            throw error.response.data;
+        }
     }
 }

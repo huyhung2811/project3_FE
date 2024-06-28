@@ -10,7 +10,7 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { items } from '../../../stores/ItemPath/ItemPath.js';
 import { useSnackbar } from "notistack";
 
-function HeaderPopper({ anchorRef,isOpen, anchorEl, setIsOpen }) {
+function HeaderPopper({ isOpen, anchorEl}) {
     const headerItems = items.filter(item => item.type === 'header');
     const handleRedirect = useRedirect().handleRedirect;
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ function HeaderPopper({ anchorRef,isOpen, anchorEl, setIsOpen }) {
         >
             {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
-                    <Paper sx={{ border: '1px solid #2c98f0', backgroundColor: '#fff', padding: '0px 10px' }}>
+                    <Paper sx={{ backgroundColor: '#001529', padding: '5px 10px' }}>    
                         <ul>
                             {headerItems.map((item) => {
                                 return (

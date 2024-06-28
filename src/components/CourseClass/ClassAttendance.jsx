@@ -1,6 +1,6 @@
 import React from 'react';
-import { attendanceApi } from '../../../services/apis/AttendanceApi';
-import { getLocalItem } from '../../../stores/LocalStorage';
+import { attendanceApi } from '../../services/apis/AttendanceApi';
+import { getLocalItem } from '../../stores/LocalStorage';
 import StudentAttendanceTable from './StudentAttendanceTable';
 import ClassAttendanceByDayTable from './ClassAttendanceByDayTable';
 
@@ -14,10 +14,10 @@ export function AttendanceTabDay({ classCode, day }) {
                 if (getLocalItem('role') === 'student') {
                     const res = await attendanceApi.getStudentAttendanceByDay(classCode, day);
                     setAttendances(res);
-                } else {
+                } 
+                if(getLocalItem('role') === 'teacher') {
                     const res = await attendanceApi.getClassAttendanceByDay(classCode, day);
-                    console.log(res);
-                    setAttendances(res.attendances);
+                    setAttendances(res);
                 }
             } catch (err) {
                 console.error(err.message);
@@ -26,9 +26,8 @@ export function AttendanceTabDay({ classCode, day }) {
         };
         fetchData();
     }, [classCode, day]);
-
     return (
-        attendances.length > 0 ? (
+        attendances && attendances.length > 0 ? (
             getLocalItem('role') === 'student' ? <StudentAttendanceTable attendances={attendances} /> : <ClassAttendanceByDayTable attendances={attendances} />
         ) : (
             <p style={{ color: "red" }}>{error}</p>
@@ -52,7 +51,7 @@ export function AttendanceTab({ classCode }) {
         };
         fetchData();
     }, [classCode]);
-
+    
     return (
         attendances.length > 0 ? (
             getLocalItem('role') === 'student' ? <StudentAttendanceTable attendances={attendances} /> : <ClassAttendanceByDayTable attendances={attendances} />

@@ -22,34 +22,6 @@ import Button from '@mui/material/Button';
 import { MdAdd } from "react-icons/md";
 import RequestCreateModal from '../../components/DayOff/RequestCreateModal';
 
-function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-function getComparator(order, orderBy) {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
-
 const headCells = [
     {
         id: 'id',
@@ -64,16 +36,16 @@ const headCells = [
         label: 'Tên người gửi',
     },
     {
+        id: 'class',
+        label: 'Lớp',
+    },
+    {
         id: 'day',
         label: 'Ngày nghỉ',
     },
     {
         id: 'reason',
         label: 'Lý do',
-    },
-    {
-        id: 'created_time',
-        label: 'Ngày tạo',
     },
     {
         id: 'status',
@@ -94,12 +66,7 @@ const getStatusColor = (status) => {
     }
 };
 
-function EnhancedTableHead(props) {
-    const { order, orderBy, onRequestSort } = props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
-
+function EnhancedTableHead() {
     return (
         <TableHead>
             <TableRow>
@@ -116,12 +83,6 @@ function EnhancedTableHead(props) {
         </TableHead>
     );
 }
-
-EnhancedTableHead.propTypes = {
-    onRequestSort: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
-};
 
 function EnhancedTableToolbar() {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -157,11 +118,6 @@ function EnhancedTableToolbar() {
     );
 }
 
-EnhancedTableToolbar.propTypes = {
-    semester: PropTypes.string.isRequired,
-    handleSemesterChange: PropTypes.func.isRequired,
-};
-
 export default function StudentRequestDayOffList() {
     const [order, setOrder] = React.useState('asc');
     const [page, setPage] = React.useState(0);
@@ -173,14 +129,13 @@ export default function StudentRequestDayOffList() {
     });
     const navigate = useNavigate();
     const value = useProfile();
-    console.log(value.countNotifications);
 
     React.useEffect(() => {
         const fetchData = async () => {
             try {
                 const res = await dayOffRequestApi.getTeacherNotifications();
-                console.log(res);
                 setTableDatas(res);
+                console.log(res);
             } catch (err) {
                 console.error(err);
             }
@@ -199,18 +154,17 @@ export default function StudentRequestDayOffList() {
 
     const visibleRows = React.useMemo(
         () =>
-            tableDatas ? stableSort(tableDatas, getComparator(order)).slice(
+            tableDatas ? tableDatas.slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage,
             ) : [],
-        [order, page, rowsPerPage, tableDatas],
+        [page, rowsPerPage, tableDatas],
     );
 
     const handleRequestClick = (event, requestId, isRead) => {
         const fetchData = async () => {
             try {
                 const res = await dayOffRequestApi.changeIsReadRequest(requestId);
-                console.log(isRead);
                 if (isRead === "0") {
                     value.setCountNotifications(value.countNotifications - 1);
                 }
@@ -265,9 +219,9 @@ export default function StudentRequestDayOffList() {
                                             </TableCell>
                                             <TableCell align="left"><Avatar sx={{ width: '40px', height: '40px', border: '1px solid #000' }} src={row.student_avatar} /></TableCell>
                                             <TableCell align="left">{row.student_name}</TableCell>
+                                            <TableCell align="left">{row.class_code} - {row.class_name}</TableCell>
                                             <TableCell align="left">{row.day}</TableCell>
                                             <TableCell align="left">{row.reason}</TableCell>
-                                            <TableCell align="left">{row.created_time}</TableCell>
                                             <TableCell align="center"><p style={{ backgroundColor: getStatusColor(row.status), padding: '0px 5px', borderRadius: '3px', }}>{row.status}</p></TableCell>
                                         </TableRow>
                                     </Tooltip>

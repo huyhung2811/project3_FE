@@ -62,16 +62,16 @@ const headCells = [
         label: 'Tên người gửi',
     },
     {
+        id: 'class',
+        label: 'Lớp',
+    },
+    {
         id: 'day',
         label: 'Ngày nghỉ',
     },
     {
         id: 'reason',
         label: 'Lý do',
-    },
-    {
-        id: 'created_time',
-        label: 'Ngày tạo',
     },
     {
         id: 'status',
@@ -136,10 +136,6 @@ function EnhancedTableToolbar({ semester, handleSemesterChange }) {
             >
                 Yêu cầu xin nghỉ
             </Typography>
-            {/* <FormControl variant="outlined" sx={{  width:'200px', minWidth: 120, display:'flex', justifyContent:'end', flexDirection:'row', alignItems:'center' }}>
-                <p style={{width: "100px"}}>Học kỳ: </p>
-                
-            </FormControl> */}
             <Tooltip title="Filter list">
                 <IconButton>
                 </IconButton>
@@ -256,9 +252,9 @@ export default function RequestDayOffList() {
                                             </TableCell>
                                             <TableCell align="left"><Avatar sx={{ width: '40px', height: '40px', border: '1px solid #000' }} src={row.student_avatar} /></TableCell>
                                             <TableCell align="left">{row.student_name}</TableCell>
+                                            <TableCell align="left">{row.class_code} - {row.class_name}</TableCell>
                                             <TableCell align="left">{row.day}</TableCell>
                                             <TableCell align="left">{row.reason}</TableCell>
-                                            <TableCell align="left">{row.created_time}</TableCell>
                                             <TableCell align="center"><p style={{ backgroundColor: getStatusColor(row.status), padding: '0px 5px', borderRadius: '3px', }}>{row.status}</p></TableCell>
                                         </TableRow>
                                     </Tooltip>

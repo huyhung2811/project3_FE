@@ -13,6 +13,7 @@ import { FaRegBell } from "react-icons/fa";
 import { Badge } from '@mui/material';
 import NotificationsPopper from '../../Common/Popper/NotificationPopper';
 import Pusher from 'pusher-js';
+import { getLocalItem } from '../../../stores/LocalStorage';
 
 const drawerWidth = 300;
 
@@ -113,13 +114,13 @@ export default function Header({ pageName }) {
             </Toolbar>
             <>
                 <div className="header-right" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-                    <div className="notification-bell" style={{ marginRight: '10px', marginTop: '5px', fontSize: "24px" }}>
+                    {getLocalItem('role') === 'teacher' && <div className="notification-bell" style={{ marginRight: '10px', marginTop: '5px', fontSize: "24px" }}>
                         <Badge badgeContent={value.countNotifications} color="error" ref={anchorNotificationRef} onClick={handleNotificationsShow}>
                             < FaRegBell />
                         </Badge>
                         <NotificationsPopper isOpen={isShowNotifications} anchorEl={notifyEl} countNotifications={value.countNotifications} setCountNotifications={value.setCountNotifications} />
-                    </div>
-                    <HeaderPopper anchorRef={anchorPopperRef} isOpen={isOpen} anchorEl={anchorEl} setIsOpen={setIsOpen} />
+                    </div>}
+                    <HeaderPopper anchorRef={anchorPopperRef} isOpen={isOpen} anchorEl={anchorEl} />
                     {value.profile && <img ref={anchorPopperRef} src={value.profile.avatar ? value.profile.avatar : DefaultAvatar} alt="logo" style={{ marginRight: '10px', width: "60px", height: "60px", borderRadius: '50%', }} onClick={handlePopperOpen} />}
                 </div>
             </>

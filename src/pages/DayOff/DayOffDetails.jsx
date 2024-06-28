@@ -170,7 +170,7 @@ export default function DayOffDetail() {
                                         Thời gian duyệt
                                     </Grid>
                                     <Grid item xs={6} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-
+                                        {details.updated_time}
                                     </Grid>
                                 </Grid>
                             </>}

@@ -27,7 +27,6 @@ function Login() {
 
     const handleIconClick = (e) => {
         e.preventDefault();
-        console.log("Login");
         setShowPassword(!showPassword);
     }
 

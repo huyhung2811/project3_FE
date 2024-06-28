@@ -8,8 +8,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { CardHeader } from '@mui/material';
 import { studentApi } from '../../services/apis/StudentApi';
-import DetailsTab from '../../components/CourseClass/Details/DetailsTab';
-import ClassStudents from '../../components/CourseClass/Details/Students';
+import DetailsTab from '../../components/CourseClass/DetailsTab';
+import ClassStudents from '../../components/CourseClass/Students';
 
 export default function StudentClass() {
     const [value, setValue] = React.useState('1');

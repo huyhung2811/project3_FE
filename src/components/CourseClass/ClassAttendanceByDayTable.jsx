@@ -14,8 +14,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import { attendanceApi } from '../../../services/apis/AttendanceApi';
+import { attendanceApi } from '../../services/apis/AttendanceApi';
 import { useSnackbar } from "notistack";
+
+
 
 const StyledSelect = styled(Select)(({ theme, value }) => ({
     minWidth: '120px',
@@ -120,6 +122,7 @@ export default function ClassAttendanceByDayTable({ attendances }) {
                                 >
                                     <StyledMenuItem value={"Vắng"}>Vắng</StyledMenuItem>
                                     <StyledMenuItem value={"Đi muộn"}>Đi muộn</StyledMenuItem>
+                                    <StyledMenuItem value={"Nghỉ có phép"}>Nghỉ có phép</StyledMenuItem>
                                     <StyledMenuItem value={"Đi học"}>Đi học</StyledMenuItem>
                                 </StyledSelect>
                             </TableCell>
