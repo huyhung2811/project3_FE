@@ -25,7 +25,7 @@ export default function StudentClass() {
             }
         };
         fetchData();
-    });
+    },[]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
