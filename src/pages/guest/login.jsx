@@ -62,10 +62,10 @@ function Login() {
             } else {
                 setError({
                     ...error,
-                    password: err.message,
+                    password: err.error,
                 });
             }
-            console.log(error);
+            console.log(err);
         };
     }
 

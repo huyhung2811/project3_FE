@@ -62,6 +62,7 @@ function ProfileCard({ isEdit }) {
             navigate("/profile");
         } catch (err) {
             console.error(err);
+            enqueueSnackbar(err.message, { variant: "error", preventDuplicate: true });
         }
     }
 
