@@ -53,6 +53,7 @@ function Login() {
             enqueueSnackbar('Đăng nhập thành công', { variant: "success", preventDuplicate: true });
             navigate("/");
         } catch (err) {
+            enqueueSnackbar('Đăng nhập thất bại', { variant: "error", preventDuplicate: true });
             if (err.errors) {
                 setError({
                     email: err.errors.email ? err.errors.email[0] : '',
@@ -64,6 +65,7 @@ function Login() {
                     password: err.message,
                 });
             }
+            console.log(error);
         };
     }
 
