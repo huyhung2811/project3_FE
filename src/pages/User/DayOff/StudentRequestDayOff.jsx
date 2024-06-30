@@ -14,13 +14,13 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import { Avatar } from "@mui/material";
 import FormControl from '@mui/material/FormControl';
-import { dayOffRequestApi } from '../../services/apis/DayOffRequestApi';
+import { dayOffRequestApi } from '../../../services/apis/DayOffRequestApi';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
-import { useProfile } from '../../stores/Context/ProfileContext';
+import { useProfile } from '../../../stores/Context/ProfileContext';
 import Button from '@mui/material/Button';
 import { MdAdd } from "react-icons/md";
-import RequestCreateModal from '../../components/DayOff/RequestCreateModal';
+import RequestCreateModal from '../../../components/DayOff/RequestCreateModal';
 
 const headCells = [
     {

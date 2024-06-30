@@ -1,4 +1,4 @@
-import { api } from "./configs/axiosConfig";
+import { api } from "../../configs/axiosConfig";
 
 export const studentApi = {
     getStudentClass: async function () {

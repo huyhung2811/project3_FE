@@ -5,23 +5,23 @@ import { MdOutlineClass } from "react-icons/md";
 import { FaRegListAlt } from "react-icons/fa";
 import { SlNote } from "react-icons/sl";
 import { MdOutlineDeviceUnknown } from "react-icons/md";
-import Profile from "../../pages/Profile/Profile";
-import EditProfile from "../../pages/Profile/EditProfile";
+import Profile from "../../pages/User/Profile/Profile";
+import EditProfile from "../../pages/User/Profile/EditProfile";
 import {
   CourseClassDetails,
   CourseClassDetailsDay,
-} from "../../pages/CourseClass/DetailsDay";
+} from "../../pages/User/CourseClass/DetailsDay";
 import Search from "../../pages/User/Search/Search";
 import { FaSearch } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
-import StudentClass from "../../pages/StudentClass/StudentClass";
-import StudentCourseClasses from "../../pages/CourseClass/StudentCourseClasses";
-import StudentRequestDayOff from "../../pages/DayOff/StudentRequestDayOff";
-import RequestDayOffList from "../../pages/DayOff/RequestDayOffList";
-import DayOffDetail from "../../pages/DayOff/DayOffDetails";
-import TeacherCourseClasses from "../../pages/CourseClass/TeacherCourseClasses";
-import DeviceList from "../../pages/Device/DeviceList";
-import UserManager from "../../pages/UserManager/UserManager";
+import StudentClass from "../../pages/User/StudentClass/StudentClass";
+import StudentCourseClasses from "../../pages/User/CourseClass/StudentCourseClasses";
+import StudentRequestDayOff from "../../pages/User/DayOff/StudentRequestDayOff";
+import RequestDayOffList from "../../pages/User/DayOff/RequestDayOffList";
+import DayOffDetail from "../../pages/User/DayOff/DayOffDetails";
+import TeacherCourseClasses from "../../pages/User/CourseClass/TeacherCourseClasses";
+import DeviceList from "../../pages/Admin/Device/DeviceList";
+import UserManager from "../../pages/Admin/UserManager/UserManager";
 import { FaUserCog } from "react-icons/fa";
 
 export const items = [

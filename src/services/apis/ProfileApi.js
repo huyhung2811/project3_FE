@@ -1,5 +1,5 @@
 import { getLocalItem } from "../../stores/LocalStorage";
-import { api } from "./configs/axiosConfig";
+import { api } from "../../configs/axiosConfig";
 
 const link_api = {
     "student" : "/student/profile",

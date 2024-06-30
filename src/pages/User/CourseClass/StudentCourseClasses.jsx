@@ -16,7 +16,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import { courseClassApi } from '../../services/apis/CourseClassApi';
+import { courseClassApi } from '../../../services/apis/CourseClassApi';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 

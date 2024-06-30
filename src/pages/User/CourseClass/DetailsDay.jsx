@@ -8,11 +8,11 @@ import TabPanel from '@mui/lab/TabPanel';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { CardHeader } from '@mui/material';
-import {AttendanceTab, AttendanceTabDay } from '../../components/CourseClass/ClassAttendance';
-import { commonApi } from '../../services/apis/CommonApi';
-import DetailsTab from '../../components/CourseClass/DetailsTab';
-import ClassStudents from '../../components/CourseClass/Students';
-import { getLocalItem } from '../../stores/LocalStorage';
+import {AttendanceTab, AttendanceTabDay } from '../../../components/CourseClass/ClassAttendance';
+import { commonApi } from '../../../services/apis/CommonApi';
+import DetailsTab from '../../../components/CourseClass/DetailsTab';
+import ClassStudents from '../../../components/CourseClass/Students';
+import { getLocalItem } from '../../../stores/LocalStorage';
 
 export function CourseClassDetailsDay() {
     const { classCode, date } = useParams();

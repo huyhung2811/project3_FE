@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { CardActions } from '@mui/material';
 import Button from '@mui/material/Button';
-import { dayOffRequestApi } from '../../services/apis/DayOffRequestApi';
+import { dayOffRequestApi } from '../../../services/apis/DayOffRequestApi';
 import { useParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { getLocalItem } from '../../stores/LocalStorage';
+import { getLocalItem } from '../../../stores/LocalStorage';
 
 const getStatusColor = (status) => {
     switch (status) {

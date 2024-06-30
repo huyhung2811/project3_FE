@@ -15,10 +15,10 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { Avatar } from "@mui/material";
 import FormControl from '@mui/material/FormControl';
-import { dayOffRequestApi } from '../../services/apis/DayOffRequestApi';
+import { dayOffRequestApi } from '../../../services/apis/DayOffRequestApi';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
-import { useProfile } from '../../stores/Context/ProfileContext';
+import { useProfile } from '../../../stores/Context/ProfileContext';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {

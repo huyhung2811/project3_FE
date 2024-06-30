@@ -1,6 +1,6 @@
 import React from 'react';
-import ProfileCard from '../../components/Profile/ProfileCard';
-import { useProfile } from '../../stores/Context/ProfileContext';
+import ProfileCard from '../../../components/Profile/ProfileCard';
+import { useProfile } from '../../../stores/Context/ProfileContext';
 import "./Profile.css";
 import Skeleton from '@mui/material/Skeleton';
 

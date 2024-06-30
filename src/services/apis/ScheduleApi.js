@@ -1,4 +1,4 @@
-import { api } from "./configs/axiosConfig";
+import { api } from "../../configs/axiosConfig";
 import { getLocalItem } from "../../stores/LocalStorage";
 
 const link_api = {

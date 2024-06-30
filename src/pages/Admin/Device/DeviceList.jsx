@@ -13,12 +13,12 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import { IoFilter } from "react-icons/io5";
-import DeviceFilterPopper from '../../components/Device/DeviceFilterPopper';
-import { deviceApi } from '../../services/apis/DeviceApi';
+import DeviceFilterPopper from '../../../components/Device/DeviceFilterPopper';
+import { deviceApi } from '../../../services/apis/DeviceApi';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { MdDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
-import ChangeDeviceModal from '../../components/Device/ChangeDeviceModal';
+import ChangeDeviceModal from '../../../components/Device/ChangeDeviceModal';
 import { useSnackbar } from 'notistack';
 
 const headCells = [
