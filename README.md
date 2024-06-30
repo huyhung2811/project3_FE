@@ -1,9 +1,9 @@
-# Cách cài đặt ứng dụng: 
+## Cách cài đặt ứng dụng: 
 
-## 1. Cài đặt thư viện:
+1. Cài đặt thư viện:
 
 ### npm install
 
-## 2. Chạy ứng dụng:
+2. Chạy ứng dụng:
 
 ### npm start
