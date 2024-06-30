@@ -5,10 +5,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Header from './Header/NewHeader';
 import NewSidebar from './SideBar/NewSidebar';
 import { Outlet } from 'react-router-dom';
-import { items } from '../../stores/ItemPath/ItemPath';
+import { items } from '../stores/ItemPath/ItemPath';
 import { useLocation } from 'react-router-dom';
-import { RedirectProvider } from "../../stores/Context/RedirectContext";
-import { useLayout } from '../../stores/Context/LayoutContext';
+import { RedirectProvider } from "../stores/Context/RedirectContext";
+import { useLayout } from '../stores/Context/LayoutContext';
 
 const drawerWidth = 300;
 

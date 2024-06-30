@@ -1,13 +1,13 @@
 import './App.css';
 import Login from './pages/guest/login';
-import Home from './pages/Schedule/Home';
+import Home from './pages/User/Schedule/Home';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { ProfileProvider } from './stores/Context/ProfileContext';
 import { LayoutProvider } from './stores/Context/LayoutContext';
 import { items } from './stores/ItemPath/ItemPath';
 import { SnackbarProvider } from 'notistack';
-import NewLayOut from './components/Layout/Layout';
+import NewLayOut from './Layout/Layout';
 
 function App() {
 

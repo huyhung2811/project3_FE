@@ -11,7 +11,7 @@ import {
   CourseClassDetails,
   CourseClassDetailsDay,
 } from "../../pages/CourseClass/DetailsDay";
-import Search from "../../pages/Search/Search";
+import Search from "../../pages/User/Search/Search";
 import { FaSearch } from "react-icons/fa";
 import { SiGoogleclassroom } from "react-icons/si";
 import StudentClass from "../../pages/StudentClass/StudentClass";

@@ -9,11 +9,11 @@ import ListItem from '@mui/material/ListItem';
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
 import { Box, Typography } from '@mui/material';
-import { Logo } from '../../../assets';
+import { Logo } from '../../assets';
 import { Item } from '../LayoutItem/Item';
-import { useRedirect } from '../../../stores/Context/RedirectContext';
-import { items } from '../../../stores/ItemPath/ItemPath';
-import { getLocalItem } from '../../../stores/LocalStorage';
+import { useRedirect } from '../../stores/Context/RedirectContext';
+import { items } from '../../stores/ItemPath/ItemPath';
+import { getLocalItem } from '../../stores/LocalStorage';
 import './SideBar.css';
 const drawerWidth = 300;
 

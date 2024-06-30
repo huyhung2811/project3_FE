@@ -5,15 +5,15 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { TfiMenu } from "react-icons/tfi";
-import { useProfile } from '../../../stores/Context/ProfileContext';
-import { useLayout } from '../../../stores/Context/LayoutContext';
-import { DefaultAvatar } from '../../../assets';
-import HeaderPopper from '../../Common/Popper/HeaderPopper';
+import { useProfile } from '../../stores/Context/ProfileContext';
+import { useLayout } from '../../stores/Context/LayoutContext';
+import { DefaultAvatar } from '../../assets';
+import HeaderPopper from '../LayoutItem/HeaderPopper';
 import { FaRegBell } from "react-icons/fa";
 import { Badge } from '@mui/material';
-import NotificationsPopper from '../../Common/Popper/NotificationPopper';
+import NotificationsPopper from '../LayoutItem/NotificationPopper';
 import Pusher from 'pusher-js';
-import { getLocalItem } from '../../../stores/LocalStorage';
+import { getLocalItem } from '../../stores/LocalStorage';
 
 const drawerWidth = 300;
 

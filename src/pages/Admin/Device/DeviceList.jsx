@@ -13,13 +13,13 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import { IoFilter } from "react-icons/io5";
-import UserFilterPopper from '../../components/Common/Popper/UserFilterPopper';
+import DeviceFilterPopper from '../../components/Device/DeviceFilterPopper';
+import { deviceApi } from '../../services/apis/DeviceApi';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { MdDelete } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
-import ChangeUserModal from '../../components/Users/ChangeUsersModal';
+import ChangeDeviceModal from '../../components/Device/ChangeDeviceModal';
 import { useSnackbar } from 'notistack';
-import { userApi } from '../../services/apis/UserApi';
 
 const headCells = [
     {
@@ -27,12 +27,16 @@ const headCells = [
         label: 'ID',
     },
     {
-        id: 'email',
-        label: 'Email',
+        id: 'MAC_address',
+        label: 'MAC Address',
     },
     {
-        id: 'role',
-        label: 'Quyền',
+        id: 'room_id',
+        label: 'Phòng',
+    },
+    {
+        id: 'updated_time',
+        label: 'Thời gian cập nhật',
     },
     {
         id: 'status',
@@ -41,14 +45,8 @@ const headCells = [
     {
         id: 'action',
         label: 'Hành động',
-    },
+    }
 ];
-
-const role = {
-    'admin': 'Quản trị viên',
-    'student': 'Sinh viên',
-    'teacher': 'Giáo viên'
-}
 
 const getStatusColor = (status) => {
     switch (status) {
@@ -105,28 +103,28 @@ function EnhancedTableToolbar({ setSearchParams }) {
                 id="tableTitle"
                 component="div"
             >
-                Danh sách người dùng
+                Danh sách thiết bị
             </Typography>
             <Tooltip title="Bộ lọc">
                 <IconButton onClick={handleOpenPopover} aria-describedby={id}>
                     <IoFilter />
                 </IconButton>
-                <UserFilterPopper anchorEl={anchorEl} handleClosePopover={handleClosePopover} id={id} open={open} setSearchParams={setSearchParams} />
+                <DeviceFilterPopper anchorEl={anchorEl} handleClosePopover={handleClosePopover} id={id} open={open} setSearchParams={setSearchParams}/>
             </Tooltip>
         </Toolbar>
     );
 }
 
-export default function UserList() {
+export default function DeviceList() {
     const [page, setPage] = React.useState(0);
     const [tableDatas, setTableDatas] = React.useState([]);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [total, setTotal] = React.useState(0);
     const [searchParams, setSearchParams] = useSearchParams();
     const [error, setError] = React.useState(null);
-    const [isChange, setIsChange] = React.useState(false);
     const [isModalOpen, setIsModalOpen] = React.useState(false);
-    const [selectedUser, setSelectedUser] = React.useState(null);
+    const [isChange, setIsChange] = React.useState(false);
+    const [selectedDevice, setSelectedDevice] = React.useState(null);
     const { enqueueSnackbar } = useSnackbar();
     const location = useLocation();
 
@@ -135,17 +133,18 @@ export default function UserList() {
         const queryParams = new URLSearchParams(location.search);
         queryParams.set('page', page + 1);
         setSearchParams(queryParams);
-        const role = queryParams.get('role');
+        const room = queryParams.get('room');
+        const building = queryParams.get('building');
         const status = queryParams.get('status');
         const fetchData = async () => {
             try {
-                const res = await userApi.getUsers(page, rowsPerPage, role, status);
+                const res = await deviceApi.getDevices(page, rowsPerPage, building, room, status);
                 setTotal(res.total);
                 setTableDatas(res.data);
             } catch (err) {
                 console.error(err);
-                setTableDatas(null);
                 setTotal(0);
+                setTableDatas(null);
                 setError(err.message);
             }
         };
@@ -168,19 +167,19 @@ export default function UserList() {
         setPage(0);
     };
 
-    const handleOpenModal = (user) => {
-        setSelectedUser(user);
+    const handleOpenModal = (device) => {
+        setSelectedDevice(device);
         setIsModalOpen(true);
     }
 
     const handleCloseModal = () => {
-        setSelectedUser(null);
+        setSelectedDevice(null);
         setIsModalOpen(false);
     }
 
-    const handleDeleteUser = async (id) => {
+    const handleDeleteDevice = async (id) => {
         try {
-            const res = await userApi.deleteUser(id);
+            const res = await deviceApi.deleteDevice(id);
             enqueueSnackbar(res, { variant: "success", preventDuplicate: true });
             setIsChange(true);
         } catch (err) {
@@ -191,7 +190,7 @@ export default function UserList() {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2, p: 2 }}>
-                <EnhancedTableToolbar setSearchParams={setSearchParams} />
+                <EnhancedTableToolbar setSearchParams={setSearchParams}/>
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750, p: 5 }}
@@ -200,7 +199,7 @@ export default function UserList() {
                     >
                         <EnhancedTableHead />
                         <TableBody>
-                            {tableDatas ? tableDatas.map((row, index) => {
+                            {tableDatas? tableDatas.map((row, index) => {
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 return (
                                     <TableRow
@@ -224,17 +223,18 @@ export default function UserList() {
                                         >
                                             {row.id}
                                         </TableCell>
-                                        <TableCell align="left">{row.email}</TableCell>
-                                        <TableCell align="left">{role[row.role]}</TableCell>
+                                        <TableCell align="left">{row.MAC_address}</TableCell>
+                                        <TableCell align="left">{row.room}</TableCell>
+                                        <TableCell align="left">{row.updated_time}</TableCell>
                                         <TableCell align="left" style={{ width: "160px" }}><p style={{ backgroundColor: getStatusColor(row.status), padding: '0px 5px', borderRadius: '3px', color: "white" }}>{row.status === "active" ? "Hoạt động" : "Không hoạt động"}</p></TableCell>
                                         <TableCell align="left">
-                                            <Tooltip title="Click để sửa">
-                                                <IconButton disabled={row.role === 'admin'} onClick={() => handleOpenModal(row)}>
+                                        <Tooltip title="Click để sửa">
+                                                <IconButton onClick={() => handleOpenModal(row)}>
                                                     <CiEdit />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Click để xóa">
-                                                <IconButton disabled={row.role === 'admin'} onClick={() => handleDeleteUser(row.id)}>
+                                                <IconButton onClick={() => handleDeleteDevice(row.id)}>
                                                     <MdDelete />
                                                 </IconButton>
                                             </Tooltip>
@@ -242,10 +242,10 @@ export default function UserList() {
                                     </TableRow>
                                 );
                             }) : <TableRow>
-                                <td colSpan={6} style={{ textAlign: 'center' }}>
-                                    <p style={{ fontSize: '16px', color: 'red' }}>{error}</p>
-                                </td>
-                            </TableRow>}
+                            <td colSpan={6} style={{ textAlign: 'center'}}>
+                                <p style={{ fontSize: '16px', color: 'red' }}>{error}</p>
+                            </td>
+                        </TableRow>}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -259,7 +259,7 @@ export default function UserList() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            {selectedUser && <ChangeUserModal isOpen={isModalOpen} handleClose={handleCloseModal} id={selectedUser.id} email={selectedUser.email} role={selectedUser.role} status={selectedUser.status} setIsChange={setIsChange} />}
+            {selectedDevice && <ChangeDeviceModal isOpen={isModalOpen} handleClose={handleCloseModal} id={selectedDevice.id} MAC_address={selectedDevice.MAC_address} room={selectedDevice.room} setIsChange={setIsChange}/>}
         </Box>
     );
 }

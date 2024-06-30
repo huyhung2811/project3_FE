@@ -2,12 +2,12 @@ import React from 'react';
 import Popper from '@mui/material/Popper';
 import Fade from '@mui/material/Fade';
 import Paper from '@mui/material/Paper';
-import { Item } from '../../Layout/LayoutItem/Item.jsx';
-import { useRedirect } from '../../../stores/Context/RedirectContext.js';
+import { Item } from './Item.jsx';
+import { useRedirect } from '../../stores/Context/RedirectContext.js';
 import { useNavigate } from 'react-router-dom';
-import { AuthAPI } from '../../../services/apis/AuthApi.js';
+import { AuthAPI } from '../../services/apis/AuthApi.js';
 import { IoLogOutOutline } from "react-icons/io5";
-import { items } from '../../../stores/ItemPath/ItemPath.js';
+import { items } from '../../stores/ItemPath/ItemPath.js';
 import { useSnackbar } from "notistack";
 
 function HeaderPopper({ isOpen, anchorEl}) {

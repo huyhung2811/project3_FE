@@ -9,7 +9,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useSnackbar } from "notistack";
 import { useNavigate } from 'react-router-dom';
-import { dayOffRequestApi } from '../../../services/apis/DayOffRequestApi';
+import { dayOffRequestApi } from '../../services/apis/DayOffRequestApi';
 
 function TeacherNotification({ isOpen, anchorEl, countNotifications, setCountNotifications }) {
     const [leaveRequests, setLeaveRequests] = useState([]);

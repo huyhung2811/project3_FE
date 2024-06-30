@@ -7,9 +7,9 @@ import TabPanel from '@mui/lab/TabPanel';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { CardHeader } from '@mui/material';
-import SearchInput from "../../components/Common/Input/SearchInput";
-import { searchApi } from "../../services/apis/SearchApi";
-import {SearchResultStudentTable, SearchResultTeacherTable, SearchResultCourseTable, SearchResultCourseClassTable} from "../../components/Search/SearchResultTable";
+import SearchInput from "../../../components/Common/Input/SearchInput";
+import { searchApi } from "../../../services/apis/SearchApi";
+import {SearchResultStudentTable, SearchResultTeacherTable, SearchResultCourseTable, SearchResultCourseClassTable} from "../../../components/Search/SearchResultTable";
 
 const defaultValues = {
     "student": "Họ và tên / MSSV",
