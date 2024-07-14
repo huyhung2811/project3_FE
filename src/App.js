@@ -36,8 +36,9 @@ function App() {
 
 function AuthRoute({ children, type }) {
   const token = localStorage.getItem('token');
+  const role = localStorage.getItem('role');
   const location = useLocation();
-
+  
   if (type === "private") {
     if (token) {
       return children;

@@ -23,11 +23,12 @@ import TeacherCourseClasses from "../../pages/User/CourseClass/TeacherCourseClas
 import DeviceList from "../../pages/Admin/Device/DeviceList";
 import UserManager from "../../pages/Admin/UserManager/UserManager";
 import { FaUserCog } from "react-icons/fa";
+import { getLocalItem } from "../LocalStorage";
 
 export const items = [
   {
     path: "/",
-    name: "Thời khóa biểu",
+    name: getLocalItem('role')==='admin' ? "Quản lý người dùng" : "Thời khóa biểu",
     icon: <IoCalendar className="sidebar-icon" />,
     type: "sidebar",
     role: "",
@@ -56,14 +57,14 @@ export const items = [
     element: <EditProfile />,
     role: "",
   },
-  {
-    path: "/change_password",
-    name: "Đổi mật khẩu",
-    icon: <TbPasswordUser className="header-icon" />,
-    type: "header",
-    // element: <LoginHistories/>,
-    role: "",
-  },
+  // {
+  //   path: "/change_password",
+  //   name: "Đổi mật khẩu",
+  //   icon: <TbPasswordUser className="header-icon" />,
+  //   type: "header",
+  //   // element: <LoginHistories/>,
+  //   role: "",
+  // },
   {
     path: "/course-class/:classCode",
     name: "Chi tiết lớp học",

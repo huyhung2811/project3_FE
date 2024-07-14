@@ -112,7 +112,7 @@ function ProfileCard({ isEdit }) {
             <CardContent sx={{ display: 'flex', justifyContent: "center", alignItems: 'center', flexDirection: "column" }}>
                 <Grid container spacing={{ xs: 2 }} columns={{ xs: 2, sm: 4, md: 6 }}>
                     {Object.entries(profile).map(([key, value], index) => {
-                        if (key !== 'avatar') {
+                        if (key !== 'avatar' && key !== 'notifications') {
                             return (
                                 <Grid item xs={6} md={3} key={index}>
                                     {

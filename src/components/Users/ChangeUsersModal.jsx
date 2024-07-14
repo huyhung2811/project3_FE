@@ -62,7 +62,7 @@ export default function ChangeUserModal({ isOpen, handleClose, id, email, role, 
             maxWidth={'sm'}
         >
             <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title" style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "start" }}>
-                <p>Sửa thiết bị</p>
+                <p>Chỉnh sửa tài khoản</p>
             </DialogTitle>
             <IconButton
                 aria-label="close"
